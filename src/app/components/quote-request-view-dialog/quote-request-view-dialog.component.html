@@ -1,0 +1,182 @@
+<h2 mat-dialog-title class="view-title">
+  <span>Quote Request Details</span>
+  <button mat-icon-button (click)="onClose()" class="close-btn">
+    <mat-icon>close</mat-icon>
+  </button>
+</h2>
+
+<mat-dialog-content>
+  <div class="view-body">
+
+    <!-- ── Contact Information ─────────────────────────────────────── -->
+    <p class="section-label">Contact Information</p>
+
+    <div class="info-grid">
+      <div class="info-item">
+        <span class="info-key">Full Name</span>
+        <span class="info-val">{{ quote.fullName }}</span>
+      </div>
+      <div class="info-item">
+        <span class="info-key">Company Name</span>
+        <span class="info-val">{{ quote.companyName || '—' }}</span>
+      </div>
+      <div class="info-item">
+        <span class="info-key">Email</span>
+        <span class="info-val info-val--email">{{ quote.email }}</span>
+      </div>
+      <div class="info-item">
+        <span class="info-key">Phone</span>
+        <span class="info-val">{{ quote.phone || '—' }}</span>
+      </div>
+      <div class="info-item">
+        <span class="info-key">Country</span>
+        <span class="info-val">{{ quote.country || '—' }}</span>
+      </div>
+      <div class="info-item">
+        <span class="info-key">Industry</span>
+        <span class="info-val">{{ quote.industry || '—' }}</span>
+      </div>
+    </div>
+
+    <mat-divider class="section-divider"></mat-divider>
+
+    <!-- ── Technical Requirements ─────────────────────────────────── -->
+    <p class="section-label">Technical Requirements</p>
+
+    <div class="category-badge-row">
+      <span class="badge badge-category">
+        {{ categoryLabel[quote.selectedCategory] || quote.selectedCategory }}
+      </span>
+    </div>
+
+    <!-- Water Quality -->
+    <ng-container *ngIf="quote.technical?.selectedCategory === 'waterQuality' && quote.technical?.waterQuality as wq">
+      <div class="tech-grid">
+        <div class="info-item" *ngIf="wq.waterType">
+          <span class="info-key">Water Type</span>
+          <span class="info-val">{{ wq.waterType }}</span>
+        </div>
+        <div class="info-item" *ngIf="wq.application">
+          <span class="info-key">Application</span>
+          <span class="info-val">{{ wq.application }}</span>
+        </div>
+        <div class="info-item" *ngIf="wq.controllerTransmitter">
+          <span class="info-key">Controller / Transmitter</span>
+          <span class="info-val">{{ wq.controllerTransmitter }}</span>
+        </div>
+      </div>
+      <div class="info-item full" *ngIf="wq.parameters?.length">
+        <span class="info-key">Parameters</span>
+        <div class="chip-list">
+          <span class="chip" *ngFor="let p of wq.parameters">{{ p }}</span>
+        </div>
+      </div>
+      <div class="info-item full" *ngIf="wq.additionalInfo">
+        <span class="info-key">Additional Info</span>
+        <span class="info-val info-val--pre">{{ wq.additionalInfo }}</span>
+      </div>
+    </ng-container>
+
+    <!-- Flow Measurement -->
+    <ng-container *ngIf="quote.technical?.selectedCategory === 'flowMeasurement' && quote.technical?.flowMeasurement as fm">
+      <div class="tech-grid">
+        <div class="info-item" *ngIf="fm.waterType">
+          <span class="info-key">Water Type</span>
+          <span class="info-val">{{ fm.waterType }}</span>
+        </div>
+        <div class="info-item" *ngIf="fm.measurementType">
+          <span class="info-key">Measurement Type</span>
+          <span class="info-val">{{ fm.measurementType }}</span>
+        </div>
+      </div>
+      <div class="info-item full" *ngIf="fm.fmFeatures?.length">
+        <span class="info-key">Features</span>
+        <div class="chip-list">
+          <span class="chip" *ngFor="let f of fm.fmFeatures">{{ f }}</span>
+        </div>
+      </div>
+      <div class="info-item full" *ngIf="fm.additionalInfo">
+        <span class="info-key">Additional Info</span>
+        <span class="info-val info-val--pre">{{ fm.additionalInfo }}</span>
+      </div>
+    </ng-container>
+
+    <!-- Level Measurement -->
+    <ng-container *ngIf="quote.technical?.selectedCategory === 'levelMeasurement' && quote.technical?.levelMeasurement as lm">
+      <div class="tech-grid">
+        <div class="info-item" *ngIf="lm.waterType">
+          <span class="info-key">Water Type</span>
+          <span class="info-val">{{ lm.waterType }}</span>
+        </div>
+        <div class="info-item" *ngIf="lm.transmitterType">
+          <span class="info-key">Transmitter Type</span>
+          <span class="info-val">{{ lm.transmitterType }}</span>
+        </div>
+        <div class="info-item" *ngIf="lm.pumpControllerRequired">
+          <span class="info-key">Pump Controller Required</span>
+          <span class="info-val">{{ lm.pumpControllerRequired }}</span>
+        </div>
+        <div class="info-item" *ngIf="lm.position">
+          <span class="info-key">Position</span>
+          <span class="info-val">{{ lm.position }}</span>
+        </div>
+        <div class="info-item" *ngIf="lm.depthUpTo">
+          <span class="info-key">Depth Up To</span>
+          <span class="info-val">{{ lm.depthUpTo }}</span>
+        </div>
+      </div>
+      <div class="info-item full" *ngIf="lm.additionalInfo">
+        <span class="info-key">Additional Info</span>
+        <span class="info-val info-val--pre">{{ lm.additionalInfo }}</span>
+      </div>
+    </ng-container>
+
+    <!-- Fallback: technical data not available -->
+    <p class="no-tech" *ngIf="!quote.technical">
+      Technical details not available.
+    </p>
+
+    <mat-divider class="section-divider"></mat-divider>
+
+    <!-- ── Metadata ───────────────────────────────────────────────── -->
+    <p class="section-label">Metadata</p>
+
+    <div class="meta-row">
+      <div class="meta-status">
+        <span class="info-key">Status</span>
+        <div class="status-select-row">
+          <span class="badge" [ngClass]="getStatusClass(quote.status)">{{ quote.status }}</span>
+          <button mat-stroked-button [matMenuTriggerFor]="statusMenu"
+                  class="change-status-btn" [disabled]="updatingStatus()">
+            <mat-icon>swap_horiz</mat-icon>
+            {{ updatingStatus() ? 'Updating…' : 'Change Status' }}
+          </button>
+          <mat-menu #statusMenu="matMenu">
+            <button mat-menu-item *ngFor="let opt of statusOptions"
+                    (click)="onStatusChange(opt.value)"
+                    [class.status-current]="quote.status === opt.value">
+              <mat-icon *ngIf="quote.status === opt.value">check</mat-icon>
+              <mat-icon *ngIf="quote.status !== opt.value">radio_button_unchecked</mat-icon>
+              <span>{{ opt.label }}</span>
+            </button>
+          </mat-menu>
+        </div>
+      </div>
+
+      <div class="info-item" *ngIf="quote.createdAt">
+        <span class="info-key">Created Date</span>
+        <span class="info-val">{{ quote.createdAt | date:'medium' }}</span>
+      </div>
+
+      <div class="info-item" *ngIf="quote.updatedAt">
+        <span class="info-key">Updated Date</span>
+        <span class="info-val">{{ quote.updatedAt | date:'medium' }}</span>
+      </div>
+    </div>
+
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-raised-button color="primary" (click)="onClose()">Close</button>
+</mat-dialog-actions>

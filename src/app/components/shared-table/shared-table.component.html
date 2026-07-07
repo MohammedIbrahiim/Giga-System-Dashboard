@@ -1,0 +1,84 @@
+<mat-card class="table-card">
+  <mat-progress-bar *ngIf="loading" mode="indeterminate" class="loading-bar"></mat-progress-bar>
+
+  <mat-card-header *ngIf="title">
+    <mat-card-title>{{ title }}</mat-card-title>
+  </mat-card-header>
+
+  <mat-card-content>
+    <div class="table-wrapper">
+      <table mat-table [dataSource]="dataSource" matSort class="full-width">
+
+        <ng-container *ngFor="let col of columns" [matColumnDef]="col.key">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ col.label }}</th>
+          <td mat-cell *matCellDef="let row">
+            <ng-container [ngSwitch]="col.type">
+
+              <span *ngSwitchCase="'currency'">
+                {{ row[col.key] | currency:'USD':'symbol':'1.2-2' }}
+              </span>
+
+              <span *ngSwitchCase="'badge'"
+                class="badge"
+                [ngClass]="'badge-' + getBadgeClass(row[col.key])">
+                {{ row[col.key] }}
+              </span>
+
+              <div *ngSwitchCase="'progress'" class="progress-cell">
+                <mat-progress-bar mode="determinate" [value]="row[col.key]"></mat-progress-bar>
+                <span class="progress-label">{{ row[col.key] }}%</span>
+              </div>
+
+              <ng-container *ngSwitchCase="'image'">
+                <img *ngIf="row[col.key]" [src]="row[col.key]" class="table-thumbnail" alt="" />
+                <span *ngIf="!row[col.key]" class="no-image">—</span>
+              </ng-container>
+
+              <ng-container *ngSwitchCase="'gallery'">
+                <div class="gallery-stack" *ngIf="row[col.key]?.length">
+                  <img
+                    *ngFor="let src of row[col.key] | slice:0:4"
+                    [src]="formatBase64Image(src)"
+                    class="gallery-thumb"
+                    alt="" />
+                  <span *ngIf="row[col.key].length > 4" class="gallery-more">
+                    +{{ row[col.key].length - 4 }}
+                  </span>
+                </div>
+                <span *ngIf="!row[col.key]?.length" class="no-image">—</span>
+              </ng-container>
+
+              <span *ngSwitchDefault>{{ row[col.key] }}</span>
+            </ng-container>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef class="actions-header"></th>
+          <td mat-cell *matCellDef="let row" class="actions-cell">
+            <button mat-icon-button color="primary" (click)="editItem.emit(row)" title="Edit">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button color="warn" (click)="deleteItem.emit(row)" title="Delete">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+        <tr class="mat-row no-data-row" *matNoDataRow>
+          <td class="mat-cell" [attr.colspan]="displayedColumns.length">No data available.</td>
+        </tr>
+      </table>
+    </div>
+
+    <mat-paginator
+      [pageSizeOptions]="pageSizeOptions"
+      [pageSize]="pageSize"
+      showFirstLastButtons
+      aria-label="Select page">
+    </mat-paginator>
+  </mat-card-content>
+</mat-card>

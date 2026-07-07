@@ -1,0 +1,115 @@
+<h2 mat-dialog-title>{{ config.title }}</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" *ngIf="form">
+    <div *ngFor="let field of config.fields" class="form-row">
+
+      <!-- textarea -->
+      <mat-form-field *ngIf="field.type === 'textarea'" appearance="outline" class="full-width">
+        <mat-label>{{ field.label }}</mat-label>
+        <textarea matInput [formControlName]="field.key" rows="3"></textarea>
+        <mat-error *ngIf="form.get(field.key)?.hasError('required')">{{ field.label }} is required</mat-error>
+      </mat-form-field>
+
+      <!-- select -->
+      <mat-form-field *ngIf="field.type === 'select'" appearance="outline" class="full-width">
+        <mat-label>{{ field.label }}</mat-label>
+        <mat-select [formControlName]="field.key" [aria-label]="field.label">
+          <mat-option *ngFor="let opt of field.options" [value]="opt">{{ opt }}</mat-option>
+        </mat-select>
+        <mat-error *ngIf="form.get(field.key)?.hasError('required')">{{ field.label }} is required</mat-error>
+      </mat-form-field>
+
+      <!-- number -->
+      <mat-form-field *ngIf="field.type === 'number'" appearance="outline" class="full-width">
+        <mat-label>{{ field.label }}</mat-label>
+        <input matInput type="number" [formControlName]="field.key" />
+        <mat-error *ngIf="form.get(field.key)?.hasError('required')">{{ field.label }} is required</mat-error>
+      </mat-form-field>
+
+      <!-- text -->
+      <mat-form-field *ngIf="field.type === 'text'" appearance="outline" class="full-width">
+        <mat-label>{{ field.label }}</mat-label>
+        <input matInput type="text" [formControlName]="field.key" />
+        <mat-error *ngIf="form.get(field.key)?.hasError('required')">{{ field.label }} is required</mat-error>
+      </mat-form-field>
+
+      <!-- date -->
+      <mat-form-field *ngIf="field.type === 'date'" appearance="outline" class="full-width">
+        <mat-label>{{ field.label }}</mat-label>
+        <input matInput [matDatepicker]="picker" [formControlName]="field.key" />
+        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+        <mat-error *ngIf="form.get(field.key)?.hasError('required')">{{ field.label }} is required</mat-error>
+      </mat-form-field>
+
+      <!-- cover image (single) -->
+      <div *ngIf="field.type === 'image'" class="image-upload-field">
+        <span class="image-field-label">{{ field.label }}</span>
+        <div *ngIf="imagePreviews[field.key]" class="image-preview-wrap">
+          <img [src]="imagePreviews[field.key]" class="image-preview" alt="preview" />
+          <button mat-icon-button type="button" class="remove-btn" (click)="removeImage(field.key)">
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+        <input
+          #fileInput
+          type="file"
+          accept="image/*"
+          style="display:none"
+          (change)="onImageSelect($event, field.key)" />
+        <button
+          *ngIf="!imagePreviews[field.key]"
+          mat-stroked-button
+          type="button"
+          class="select-image-btn"
+          (click)="fileInput.click()">
+          <mat-icon>upload</mat-icon>
+          Select Cover Image
+        </button>
+      </div>
+
+      <!-- gallery (multiple images) -->
+      <div *ngIf="field.type === 'gallery'" class="gallery-upload-field">
+        <span class="image-field-label">{{ field.label }}</span>
+        <div class="gallery-previews" *ngIf="galleryImages(field.key).length > 0">
+          <div
+            *ngFor="let img of galleryImages(field.key); let i = index"
+            class="gallery-thumb-wrap">
+            <img [src]="img" class="gallery-thumb" alt="gallery image {{ i + 1 }}" />
+            <button
+              mat-icon-button
+              type="button"
+              class="gallery-remove-btn"
+              (click)="removeGalleryImage(field.key, i)">
+              <mat-icon>close</mat-icon>
+            </button>
+          </div>
+        </div>
+        <input
+          #galleryInput
+          type="file"
+          accept="image/*"
+          multiple
+          style="display:none"
+          (change)="onGallerySelect($event, field.key)" />
+        <button
+          mat-stroked-button
+          type="button"
+          class="select-image-btn"
+          (click)="galleryInput.click()">
+          <mat-icon>add_photo_alternate</mat-icon>
+          Add Images
+        </button>
+      </div>
+
+    </div>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">Cancel</button>
+  <button mat-raised-button color="primary" (click)="onSubmit()" [disabled]="form.invalid">
+    Save
+  </button>
+</mat-dialog-actions>

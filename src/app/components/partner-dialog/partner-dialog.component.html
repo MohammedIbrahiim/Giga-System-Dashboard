@@ -1,0 +1,140 @@
+<h2 mat-dialog-title>{{ isAdd ? 'Add Partner' : 'Edit Partner' }}</h2>
+
+<mat-dialog-content *ngIf="form">
+  <form [formGroup]="form" novalidate class="dialog-form">
+
+    <!-- ── Basic Info ─────────────────────────────────────────────────── -->
+    <p class="section-label">Basic Information</p>
+
+    <div class="two-col">
+      <mat-form-field appearance="outline">
+        <mat-label>Partner Name</mat-label>
+        <input matInput formControlName="name" />
+        <mat-error *ngIf="form.get('name')?.hasError('required')">Required</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Slug</mat-label>
+        <input matInput formControlName="slug" />
+        <mat-hint>Auto-generated from name</mat-hint>
+        <mat-error *ngIf="form.get('slug')?.hasError('required')">Required</mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="two-col">
+      <mat-form-field appearance="outline">
+        <mat-label>Sort Order</mat-label>
+        <input matInput type="number" formControlName="sortOrder" min="0" />
+        <mat-error *ngIf="form.get('sortOrder')?.hasError('required')">Required</mat-error>
+        <mat-error *ngIf="form.get('sortOrder')?.hasError('min')">Must be ≥ 0</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Status</mat-label>
+        <mat-select formControlName="active">
+          <mat-option *ngFor="let opt of activeOptions" [value]="opt.value">
+            {{ opt.label }}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="form.get('active')?.hasError('required')">Required</mat-error>
+      </mat-form-field>
+    </div>
+
+    <mat-divider class="section-divider"></mat-divider>
+
+    <!-- ── Descriptions ───────────────────────────────────────────────── -->
+    <p class="section-label">Descriptions</p>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Short Description</mat-label>
+      <textarea matInput formControlName="shortDescription" rows="2"></textarea>
+      <mat-error *ngIf="form.get('shortDescription')?.hasError('required')">Required</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Full Description</mat-label>
+      <textarea matInput formControlName="fullDescription" rows="5"></textarea>
+      <mat-error *ngIf="form.get('fullDescription')?.hasError('required')">Required</mat-error>
+    </mat-form-field>
+
+    <mat-divider class="section-divider"></mat-divider>
+
+    <!-- ── Logo ──────────────────────────────────────────────────────── -->
+    <p class="section-label">
+      Logo <span class="required-star">*</span>
+    </p>
+
+    <div class="image-upload-field">
+      <div *ngIf="logoPreview()" class="single-preview">
+        <img [src]="logoPreview()!" class="single-preview-img" alt="Logo preview" />
+        <button type="button" class="remove-single-btn" (click)="removeLogo()" matTooltip="Remove">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+      <p *ngIf="logoRequired()" class="field-error">Logo is required</p>
+      <input #logoInput type="file" accept="image/*" style="display:none"
+             (change)="onLogoSelect($event)" />
+      <button mat-stroked-button type="button" class="select-file-btn"
+              (click)="logoInput.click()">
+        <mat-icon>{{ logoPreview() ? 'swap_horiz' : 'upload' }}</mat-icon>
+        {{ logoPreview() ? 'Replace Logo' : 'Upload Logo' }}
+      </button>
+    </div>
+
+    <mat-divider class="section-divider"></mat-divider>
+
+    <!-- ── Partner Image (optional) ──────────────────────────────────── -->
+    <p class="section-label">
+      Partner Image <span class="optional-label">(optional)</span>
+    </p>
+
+    <div class="image-upload-field">
+      <div *ngIf="imagePreview()" class="single-preview">
+        <img [src]="imagePreview()!" class="single-preview-img single-preview-img--wide"
+             alt="Partner image preview" />
+        <button type="button" class="remove-single-btn" (click)="removeImage()" matTooltip="Remove">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+      <input #imageInput type="file" accept="image/*" style="display:none"
+             (change)="onImageSelect($event)" />
+      <button mat-stroked-button type="button" class="select-file-btn"
+              (click)="imageInput.click()">
+        <mat-icon>{{ imagePreview() ? 'swap_horiz' : 'add_photo_alternate' }}</mat-icon>
+        {{ imagePreview() ? 'Replace Image' : 'Upload Image' }}
+      </button>
+    </div>
+
+    <mat-divider class="section-divider"></mat-divider>
+
+    <!-- ── What We Offer ─────────────────────────────────────────────── -->
+    <p class="section-label">What We Offer</p>
+
+    <div formArrayName="whatWeOffer" *ngIf="whatWeOffer.length">
+      <div class="offer-list">
+        <div *ngFor="let ctrl of whatWeOffer.controls; let i = index"
+             class="offer-row">
+          <input class="offer-input" [formControlName]="i"
+                 placeholder="e.g. 24/7 Technical Support" />
+          <button mat-icon-button type="button" color="warn"
+                  (click)="removeOffer(i)" matTooltip="Remove">
+            <mat-icon>remove_circle_outline</mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <button mat-stroked-button type="button" class="select-file-btn" (click)="addOffer()">
+      <mat-icon>add</mat-icon> Add Offer Item
+    </button>
+
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button type="button" (click)="onCancel()">Cancel</button>
+  <button mat-raised-button color="primary" type="button"
+          (click)="onSubmit()" [disabled]="form.invalid || loading()">
+    {{ loading() ? 'Saving…' : 'Save' }}
+  </button>
+</mat-dialog-actions>

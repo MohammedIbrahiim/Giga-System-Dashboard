@@ -1,0 +1,179 @@
+.view-dialog-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-right: 8px;
+}
+
+.close-btn {
+  margin: -8px -4px -8px 0;
+}
+
+// ─── Body ─────────────────────────────────────────────────────────────────────
+
+.view-body {
+  min-width: 480px;
+  max-width: 620px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 4px 0 8px;
+}
+
+// ─── Header row ───────────────────────────────────────────────────────────────
+
+.view-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 8px;
+}
+
+.view-logo-wrap {
+  flex-shrink: 0;
+}
+
+.view-logo-img {
+  width: 100px;
+  height: 64px;
+  object-fit: contain;
+  border-radius: 8px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  background: #fafafa;
+  padding: 4px;
+  display: block;
+}
+
+.view-title-block {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  flex: 1;
+}
+
+.view-name {
+  font-size: 18px;
+  font-weight: 500;
+  color: #1e293b;
+}
+
+.view-slug {
+  font-size: 12px;
+  font-family: monospace;
+  color: #0B5ED7;
+}
+
+.view-badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 11.5px;
+  font-weight: 500;
+  white-space: nowrap;
+  align-self: flex-start;
+}
+
+.badge-active {
+  background: rgba(22, 163, 74, 0.1);
+  color: #15803d;
+  border: 1px solid rgba(22, 163, 74, 0.25);
+}
+
+.badge-inactive {
+  background: rgba(0, 0, 0, 0.06);
+  color: #616161;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+// ─── Partner image ────────────────────────────────────────────────────────────
+
+.view-image-wrap {
+  margin: 4px 0 8px;
+}
+
+.view-partner-img {
+  width: 100%;
+  max-height: 200px;
+  object-fit: cover;
+  border-radius: 10px;
+  display: block;
+}
+
+// ─── Sections ─────────────────────────────────────────────────────────────────
+
+.section-label {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #0B5ED7;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  margin: 8px 0 4px;
+}
+
+.view-divider {
+  margin: 6px 0;
+}
+
+.view-text {
+  font-size: 14px;
+  color: #374151;
+  margin: 0;
+  line-height: 1.6;
+
+  &--pre { white-space: pre-wrap; }
+}
+
+// ─── What We Offer ────────────────────────────────────────────────────────────
+
+.offer-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.offer-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13.5px;
+  color: #374151;
+}
+
+.offer-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+  color: #16a34a;
+  flex-shrink: 0;
+}
+
+// ─── Meta row ─────────────────────────────────────────────────────────────────
+
+.view-meta {
+  display: flex;
+  gap: 32px;
+  flex-wrap: wrap;
+  margin-top: 4px;
+}
+
+.meta-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.meta-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(0, 0, 0, 0.45);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.meta-value {
+  font-size: 13.5px;
+  color: #374151;
+}

@@ -1,0 +1,203 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* { box-sizing: border-box; }
+
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
+}
+
+// ─── Global theme override: #0B5ED7 ───────────────────────────────────────
+
+$primary: #0B5ED7;
+
+mat-toolbar.mat-primary { background: $primary !important; }
+
+.mat-mdc-raised-button.mat-primary {
+  --mdc-protected-button-container-color: #{$primary};
+  background-color: $primary !important;
+}
+.mat-mdc-unelevated-button.mat-primary {
+  --mdc-filled-button-container-color: #{$primary};
+  background-color: $primary !important;
+}
+.mat-mdc-outlined-button.mat-primary   { color: $primary !important; border-color: $primary !important; }
+.mat-mdc-icon-button.mat-primary       { color: $primary !important; }
+
+.mat-mdc-form-field.mat-focused {
+  .mdc-notched-outline__leading,
+  .mdc-notched-outline__notch,
+  .mdc-notched-outline__trailing { border-color: $primary !important; }
+  .mat-mdc-floating-label         { color: $primary !important; }
+  .mat-mdc-select-arrow           { color: $primary !important; }
+}
+
+.mat-mdc-progress-bar {
+  --mdc-linear-progress-active-indicator-color: #{$primary};
+  --mdc-linear-progress-track-color: rgba(11, 94, 215, 0.15);
+}
+
+.mat-mdc-paginator .mat-mdc-icon-button:not([disabled]) { color: $primary !important; }
+
+.mat-mdc-checkbox.mat-primary {
+  --mdc-checkbox-selected-focus-icon-color: #{$primary};
+  --mdc-checkbox-selected-hover-icon-color: #{$primary};
+  --mdc-checkbox-selected-icon-color: #{$primary};
+  --mdc-checkbox-selected-pressed-icon-color: #{$primary};
+}
+
+.mat-mdc-option.mdc-list-item--selected:not(.mat-mdc-option-multiple) .mdc-list-item__primary-text {
+  color: $primary !important;
+}
+.mat-mdc-option.mat-mdc-option-active { background: rgba(11, 94, 215, 0.08) !important; }
+
+// ─── Profile dropdown (rendered in CDK overlay, outside component scope) ──
+
+.profile-menu-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px 12px;
+  pointer-events: none;
+  min-width: 260px;
+}
+
+.profile-menu-avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #0B5ED7, #1565C0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.profile-menu-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.profile-menu-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-menu-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #212121;
+}
+
+.profile-menu-email {
+  font-size: 12px;
+  color: #757575;
+}
+
+.logout-item {
+  color: #e53935 !important;
+  mat-icon, .mat-icon { color: #e53935 !important; }
+}
+
+
+// ─── Mat-select panel (CDK overlay — must be global) ──────────────────────
+
+.mat-mdc-select-panel {
+  border-radius: 10px !important;
+  padding: 4px 0 !important;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.13) !important;
+  border: 1px solid rgba(99, 102, 241, 0.18) !important;
+  animation: selectFadeIn 0.18s ease;
+
+  .mat-mdc-option {
+    font-size: 14px;
+    min-height: 40px;
+    padding: 0 16px;
+    border-radius: 6px;
+    margin: 2px 6px;
+    width: calc(100% - 12px);
+    transition: background 0.15s ease;
+
+    &:hover:not(.mdc-list-item--disabled) {
+      background: rgba(99, 102, 241, 0.09) !important;
+    }
+
+    &.mdc-list-item--selected:not(.mat-mdc-option-multiple) {
+      background: rgba(99, 102, 241, 0.13) !important;
+      .mdc-list-item__primary-text { color: #6366f1 !important; font-weight: 500; }
+    }
+
+    &.mat-mdc-option-active {
+      background: rgba(99, 102, 241, 0.06) !important;
+      outline: 2px solid rgba(99, 102, 241, 0.4);
+      outline-offset: -2px;
+    }
+  }
+}
+
+@keyframes selectFadeIn {
+  from { opacity: 0; transform: translateY(-6px) scaleY(0.97); }
+  to   { opacity: 1; transform: translateY(0)   scaleY(1); }
+}
+
+
+// ─── Search bar (page-level, above tables) ─────────────────────────────────
+
+.search-bar {
+  margin-bottom: 16px;
+}
+
+.search-field {
+  width: 100%;
+  max-width: 420px;
+}
+
+
+// ─── Success snackbar ──────────────────────────────────────────────────────
+
+.success-snackbar .mdc-snackbar__surface {
+  background-color: #2e7d32 !important;
+  border-radius: 8px !important;
+  padding: 16px 20px !important;
+  min-height: 60px !important;
+  opacity: 0.88 !important;
+}
+
+.success-snackbar .mdc-snackbar__label {
+  color: white !important;
+  font-weight: bold !important;
+  font-size: 15px !important;
+}
+
+.success-snackbar .mat-mdc-snack-bar-action {
+  color: rgba(255, 255, 255, 0.87) !important;
+}
+
+
+// ─── Error snackbar ────────────────────────────────────────────────────────
+
+.error-snackbar .mdc-snackbar__surface {
+  background-color: #c62828 !important;
+  border-radius: 8px !important;
+  padding: 16px 20px !important;
+  min-height: 60px !important;
+  opacity: 0.88 !important;
+}
+
+.error-snackbar .mdc-snackbar__label {
+  color: white !important;
+  font-weight: bold !important;
+  font-size: 15px !important;
+}
+
+.error-snackbar .mat-mdc-snack-bar-action {
+  color: rgba(255, 255, 255, 0.87) !important;
+}

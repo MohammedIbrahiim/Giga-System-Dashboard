@@ -1,0 +1,144 @@
+<!-- Login page renders full-screen without the shell -->
+<router-outlet *ngIf="isLoginPage(); else shell"></router-outlet>
+
+<ng-template #shell>
+<mat-sidenav-container class="sidenav-container">
+
+  <mat-sidenav
+    #sidenav
+    [mode]="sidebarMode"
+    [opened]="appState.sidebarOpen()"
+    class="sidenav"
+    fixedInViewport>
+
+    <div class="brand">
+      <div class="brand-logo"><mat-icon>hub</mat-icon></div>
+      <span class="brand-name">Giga System</span>
+    </div>
+
+    <mat-nav-list class="nav-list">
+      <a mat-list-item routerLink="/dashboard" routerLinkActive="active-link">
+        <mat-icon matListItemIcon>grid_view</mat-icon>
+        <span matListItemTitle>Dashboard</span>
+      </a>
+
+      <div class="nav-section-label">Content</div>
+
+      <a mat-list-item routerLink="/news" routerLinkActive="active-link">
+        <mat-icon matListItemIcon>newspaper</mat-icon>
+        <span matListItemTitle>News</span>
+      </a>
+
+      <a mat-list-item routerLink="/products" routerLinkActive="active-link">
+        <mat-icon matListItemIcon>inventory_2</mat-icon>
+        <span matListItemTitle>Products</span>
+      </a>
+
+      <a mat-list-item routerLink="/projects" routerLinkActive="active-link">
+        <mat-icon matListItemIcon>work</mat-icon>
+        <span matListItemTitle>Projects</span>
+      </a>
+
+      <a mat-list-item routerLink="/partners" routerLinkActive="active-link">
+        <mat-icon matListItemIcon>handshake</mat-icon>
+        <span matListItemTitle>Partners</span>
+      </a>
+
+      <a mat-list-item routerLink="/quote-requests" routerLinkActive="active-link">
+        <mat-icon matListItemIcon>request_quote</mat-icon>
+        <span matListItemTitle>Quote Requests</span>
+      </a>
+
+      <a mat-list-item routerLink="/contact-messages" routerLinkActive="active-link">
+        <mat-icon matListItemIcon>mail</mat-icon>
+        <span matListItemTitle>Contact Messages</span>
+      </a>
+
+      <!-- Management section — SUPER_ADMIN only -->
+      <ng-container *ngIf="isSuperAdmin">
+        <div class="nav-section-label">Management</div>
+        <a mat-list-item routerLink="/users" routerLinkActive="active-link">
+          <mat-icon matListItemIcon>manage_accounts</mat-icon>
+          <span matListItemTitle>Users</span>
+        </a>
+      </ng-container>
+    </mat-nav-list>
+
+    <div class="sidenav-footer">
+      <div class="user-mini">
+        <div class="user-mini-avatar">
+          <img *ngIf="auth.profileImage()" [src]="auth.profileImage()!" class="user-mini-img" alt="Profile" />
+          <span *ngIf="!auth.profileImage()">{{ auth.initials() }}</span>
+        </div>
+        <div class="user-mini-info">
+          <span class="user-mini-name">{{ auth.name() }}</span>
+          <span class="user-mini-role">{{ auth.email() }}</span>
+        </div>
+      </div>
+    </div>
+
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+
+    <mat-toolbar color="primary" class="toolbar">
+      <button mat-icon-button (click)="appState.toggleSidebar()" aria-label="Toggle sidebar">
+        <mat-icon>menu</mat-icon>
+      </button>
+      <span class="toolbar-title">Giga System</span>
+      <span class="spacer"></span>
+
+      <button mat-button class="profile-btn" [matMenuTriggerFor]="profileMenu">
+        <div class="toolbar-avatar">
+          <img *ngIf="auth.profileImage()" [src]="auth.profileImage()!" class="toolbar-avatar-img" alt="Profile" />
+          <span *ngIf="!auth.profileImage()">{{ auth.initials() }}</span>
+        </div>
+        <span class="toolbar-username">{{ auth.name() }}</span>
+        <mat-icon class="dropdown-icon">expand_more</mat-icon>
+      </button>
+
+      <mat-menu #profileMenu="matMenu" xPosition="before">
+        <div class="profile-menu-header" (click)="$event.stopPropagation()">
+          <div class="profile-menu-avatar">
+            <img *ngIf="auth.profileImage()" [src]="auth.profileImage()!" class="profile-menu-img" alt="Profile" />
+            <span *ngIf="!auth.profileImage()">{{ auth.initials() }}</span>
+          </div>
+          <div class="profile-menu-info">
+            <span class="profile-menu-name">{{ auth.name() }}</span>
+            <span class="profile-menu-email">{{ auth.email() }}</span>
+          </div>
+        </div>
+        <mat-divider></mat-divider>
+
+        <button mat-menu-item routerLink="/profile">
+          <mat-icon>person</mat-icon>
+          <span>My Profile</span>
+        </button>
+
+        <!-- Add User — SUPER_ADMIN only -->
+        <button mat-menu-item *ngIf="isSuperAdmin" (click)="openAddUserDialog()">
+          <mat-icon>person_add</mat-icon>
+          <span>Add User</span>
+        </button>
+
+        <button mat-menu-item>
+          <mat-icon>help_outline</mat-icon>
+          <span>Help &amp; Support</span>
+        </button>
+
+        <mat-divider></mat-divider>
+        <button mat-menu-item class="logout-item" (click)="logout()">
+          <mat-icon>logout</mat-icon>
+          <span>Log Out</span>
+        </button>
+      </mat-menu>
+    </mat-toolbar>
+
+    <div class="page-content">
+      <router-outlet></router-outlet>
+    </div>
+
+  </mat-sidenav-content>
+
+</mat-sidenav-container>
+</ng-template>

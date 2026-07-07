@@ -1,0 +1,181 @@
+.login-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0a1628 0%, #0d1b2a 40%, #1a2c45 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(99, 102, 241, 0.14) 0%, transparent 65%);
+    top: -120px;
+    right: -80px;
+    pointer-events: none;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    width: 380px;
+    height: 380px;
+    background: radial-gradient(circle, rgba(139, 92, 246, 0.1) 0%, transparent 65%);
+    bottom: -100px;
+    left: -80px;
+    pointer-events: none;
+  }
+}
+
+.login-card {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 44px 40px 40px;
+  width: 100%;
+  max-width: 420px;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(255,255,255,0.06);
+  position: relative;
+  z-index: 1;
+
+  @media (max-width: 480px) {
+    padding: 32px 24px 28px;
+  }
+}
+
+// ─── Brand ─────────────────────────────────────────────────────────────────
+
+.login-brand {
+  text-align: center;
+  margin-bottom: 36px;
+}
+
+.login-logo {
+  width: 60px;
+  height: 60px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 18px;
+  box-shadow: 0 8px 20px rgba(99, 102, 241, 0.35);
+
+  mat-icon {
+    color: white;
+    font-size: 30px;
+    width: 30px;
+    height: 30px;
+  }
+}
+
+.login-title {
+  font-size: 26px;
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 6px;
+  letter-spacing: -0.3px;
+}
+
+.login-subtitle {
+  font-size: 14px;
+  color: #6b7280;
+  margin: 0;
+}
+
+// ─── Form ───────────────────────────────────────────────────────────────────
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.full-width { width: 100%; }
+
+.field-icon {
+  color: rgba(0, 0, 0, 0.4);
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+  margin-right: 4px;
+}
+
+// outline + hover + focus + error — scoped to login card
+::ng-deep .login-card .mat-mdc-form-field.mat-form-field-appearance-outline {
+
+  .mdc-notched-outline__leading,
+  .mdc-notched-outline__notch,
+  .mdc-notched-outline__trailing {
+    border-color: rgba(0, 0, 0, 0.16) !important;
+    transition: border-color 0.2s ease, border-width 0.15s ease;
+  }
+
+  &:not(.mat-form-field-disabled):hover {
+    .mdc-notched-outline__leading,
+    .mdc-notched-outline__notch,
+    .mdc-notched-outline__trailing {
+      border-color: #6366f1 !important;
+    }
+  }
+
+  &.mat-focused {
+    .mdc-notched-outline__leading,
+    .mdc-notched-outline__notch,
+    .mdc-notched-outline__trailing {
+      border-color: #6366f1 !important;
+      border-width: 2px !important;
+    }
+    .mat-mdc-floating-label { color: #6366f1 !important; }
+  }
+
+  &.mat-form-field-invalid {
+    .mdc-notched-outline__leading,
+    .mdc-notched-outline__notch,
+    .mdc-notched-outline__trailing {
+      border-color: #e53935 !important;
+      border-width: 2px !important;
+    }
+    .mat-mdc-floating-label { color: #e53935 !important; }
+  }
+}
+
+::ng-deep .login-card .mat-mdc-form-field-error {
+  color: #e53935;
+  font-size: 11.5px;
+}
+
+// ─── Login button ───────────────────────────────────────────────────────────
+
+.login-btn {
+  width: 100%;
+  height: 50px;
+  margin-top: 12px;
+  border-radius: 12px !important;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%) !important;
+  color: white !important;
+  box-shadow: 0 4px 16px rgba(99, 102, 241, 0.45) !important;
+  transition: box-shadow 0.2s ease, transform 0.15s ease !important;
+
+  &:not([disabled]):hover {
+    box-shadow: 0 6px 22px rgba(99, 102, 241, 0.55) !important;
+    transform: translateY(-1px);
+  }
+
+  &:not([disabled]):active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(99, 102, 241, 0.35) !important;
+  }
+
+  &[disabled] {
+    opacity: 0.55;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6) !important;
+    box-shadow: none !important;
+  }
+}

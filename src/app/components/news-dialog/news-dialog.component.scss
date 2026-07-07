@@ -1,0 +1,105 @@
+.dialog-form {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 4px 0;
+  min-width: 520px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+
+  mat-form-field {
+    width: 100%;
+  }
+}
+
+.toggles-row {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+  padding: 4px 0 8px;
+}
+
+// ─── Image Upload ───────────────────────────────────────────────────────────
+
+.image-upload-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.image-field-label {
+  font-size: 13px;
+  color: rgba(0, 0, 0, 0.6);
+  font-weight: 500;
+}
+
+.image-preview-wrap {
+  position: relative;
+  display: inline-block;
+  width: fit-content;
+}
+
+.cover-preview {
+  width: 160px;
+  height: 90px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  display: block;
+}
+
+.gallery-preview-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.gallery-preview-item {
+  position: relative;
+  display: inline-block;
+}
+
+.gallery-thumb {
+  width: 72px;
+  height: 72px;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  display: block;
+}
+
+.remove-btn {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  background: #fff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+  width: 24px;
+  height: 24px;
+  line-height: 24px;
+
+  &.small {
+    width: 20px;
+    height: 20px;
+    line-height: 20px;
+
+    mat-icon {
+      font-size: 14px;
+      width: 14px;
+      height: 14px;
+    }
+  }
+}
+
+.select-image-btn {
+  align-self: flex-start;
+}

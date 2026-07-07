@@ -1,0 +1,100 @@
+<div class="dashboard">
+
+  <!-- Stat Cards -->
+  <div class="stats-row">
+    <mat-card class="stat-card">
+      <div class="stat-icon-wrap blue"><mat-icon>article</mat-icon></div>
+      <div class="stat-info">
+        <span class="stat-value">{{ stats().totalNews }}</span>
+        <span class="stat-label">News Articles</span>
+      </div>
+    </mat-card>
+
+    <mat-card class="stat-card">
+      <div class="stat-icon-wrap green"><mat-icon>inventory_2</mat-icon></div>
+      <div class="stat-info">
+        <span class="stat-value">{{ stats().totalProducts }}</span>
+        <span class="stat-label">Products</span>
+      </div>
+    </mat-card>
+
+    <mat-card class="stat-card">
+      <div class="stat-icon-wrap purple"><mat-icon>work</mat-icon></div>
+      <div class="stat-info">
+        <span class="stat-value">{{ stats().totalProjects }}</span>
+        <span class="stat-label">Total Projects</span>
+      </div>
+    </mat-card>
+
+    <mat-card class="stat-card">
+      <div class="stat-icon-wrap orange"><mat-icon>pending_actions</mat-icon></div>
+      <div class="stat-info">
+        <span class="stat-value">{{ stats().activeProjects }}</span>
+        <span class="stat-label">Active Projects</span>
+      </div>
+    </mat-card>
+  </div>
+
+<!-- Charts Row -->
+<div class="charts-row">
+  <!-- Full width chart -->
+  <div class="chart-card full-width">
+    <mat-card class="chart-card chart-wide">
+      <mat-card-header>
+        <mat-card-title>Monthly Revenue</mat-card-title>
+        <mat-card-subtitle>Jan – Jun 2024</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="chart-container">
+          <canvas baseChart [type]="'line'" [data]="lineChartData" [options]="lineChartOptions"></canvas>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
+  <div class="charts-row">
+
+
+    <mat-card class="chart-card">
+      <mat-card-header>
+        <mat-card-title>Weekly Sales</mat-card-title>
+        <mat-card-subtitle>Units sold this week</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="chart-container">
+          <canvas baseChart [type]="'bar'" [data]="barChartData" [options]="barChartOptions"></canvas>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  <mat-card class="chart-card half-width">
+    <mat-card-header>
+      <mat-card-title>Project Status</mat-card-title>
+      <mat-card-subtitle>Distribution overview</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="chart-container">
+        <canvas baseChart [type]="'doughnut'" [data]="doughnutChartData()" [options]="doughnutChartOptions"></canvas>
+      </div>
+    </mat-card-content>
+  </mat-card>
+  </div>
+
+  <!-- Product Slider -->
+  <!-- <mat-card class="slider-section">
+    <mat-card-header>
+      <mat-card-title>Featured Products</mat-card-title>
+      <mat-card-subtitle>Explore our top catalog picks</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <app-product-slider [items]="sliderItems"></app-product-slider>
+    </mat-card-content>
+  </mat-card> -->
+
+  <!-- Recent News -->
+  <app-shared-table
+    title="Recent News"
+    [columns]="recentNewsColumns"
+    [data]="recentNews()">
+  </app-shared-table>
+
+</div>

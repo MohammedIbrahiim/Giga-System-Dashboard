@@ -1,0 +1,16 @@
+<h2 mat-dialog-title class="confirm-title">
+   <!--  -->
+  <mat-icon class="close-icon" (click)="onCancel()">close</mat-icon>
+ 
+</h2>
+
+<mat-dialog-content class="dialog-content">
+   <!-- <h2>Are You Sure?</h2> -->
+  <p>Do you want to delete <strong>{{ data.name }}</strong>?</p>
+  <p class="left-align-text"><em>This action cannot be undone.</em></p>
+</mat-dialog-content>
+
+<mat-dialog-actions class="dialog-actions">
+  <button mat-raised-button color="primary" (click)="onConfirm()">Yes</button>
+  <button mat-raised-button (click)="onCancel()">Cancel</button>
+</mat-dialog-actions>

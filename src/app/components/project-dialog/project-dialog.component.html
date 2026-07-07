@@ -1,0 +1,241 @@
+<h2 mat-dialog-title>{{ isAdd ? 'Add Project' : 'Edit Project' }}</h2>
+
+<mat-dialog-content *ngIf="form">
+  <form [formGroup]="form" novalidate class="dialog-form">
+
+    <!-- ── Basic Info ─────────────────────────────────────────────────── -->
+    <p class="section-label">Basic Information</p>
+
+    <div class="two-col">
+      <mat-form-field appearance="outline">
+        <mat-label>Project Title</mat-label>
+        <input matInput formControlName="projectTitle" />
+        <mat-error *ngIf="form.get('projectTitle')?.hasError('required')">Required</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Project Code / Ref No.</mat-label>
+        <input matInput formControlName="projectCode" />
+        <mat-error *ngIf="form.get('projectCode')?.hasError('required')">Required</mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="two-col">
+      <mat-form-field appearance="outline">
+        <mat-label>Client Name</mat-label>
+        <mat-icon matPrefix>business</mat-icon>
+        <input matInput formControlName="clientName" />
+        <mat-error *ngIf="form.get('clientName')?.hasError('required')">Required</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Project Location (optional)</mat-label>
+        <mat-icon matPrefix>location_on</mat-icon>
+        <input matInput formControlName="projectLocation" />
+      </mat-form-field>
+    </div>
+
+    <div class="three-col">
+      <mat-form-field appearance="outline">
+        <mat-label>Country</mat-label>
+        <input matInput formControlName="country" />
+        <mat-error *ngIf="form.get('country')?.hasError('required')">Required</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>City</mat-label>
+        <input matInput formControlName="city" />
+        <mat-error *ngIf="form.get('city')?.hasError('required')">Required</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Sort Order</mat-label>
+        <input matInput type="number" formControlName="sortOrder" min="0" />
+      </mat-form-field>
+    </div>
+
+    <mat-divider class="section-divider"></mat-divider>
+
+    <!-- ── Classification ────────────────────────────────────────────── -->
+    <p class="section-label">Classification</p>
+
+    <div class="two-col">
+      <mat-form-field appearance="outline">
+        <mat-label>Category</mat-label>
+        <mat-select formControlName="category">
+          <mat-option *ngFor="let opt of categoryOptions" [value]="opt.value">
+            {{ opt.label }}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="form.get('category')?.hasError('required')">Required</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Status</mat-label>
+        <mat-select formControlName="status">
+          <mat-option *ngFor="let opt of statusOptions" [value]="opt.value">
+            {{ opt.label }}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="form.get('status')?.hasError('required')">Required</mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="two-col">
+      <mat-form-field appearance="outline">
+        <mat-label>Start Date</mat-label>
+        <input matInput [matDatepicker]="startPicker" formControlName="startDate" />
+        <mat-datepicker-toggle matIconSuffix [for]="startPicker"></mat-datepicker-toggle>
+        <mat-datepicker #startPicker></mat-datepicker>
+        <mat-error *ngIf="form.get('startDate')?.hasError('required')">Required</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>End Date (optional)</mat-label>
+        <input matInput [matDatepicker]="endPicker" formControlName="endDate" />
+        <mat-datepicker-toggle matIconSuffix [for]="endPicker"></mat-datepicker-toggle>
+        <mat-datepicker #endPicker></mat-datepicker>
+      </mat-form-field>
+    </div>
+    <mat-error *ngIf="form.hasError('endBeforeStart') && form.get('endDate')?.dirty"
+               class="cross-field-error">
+      End Date must be after Start Date
+    </mat-error>
+
+    <mat-divider class="section-divider"></mat-divider>
+
+    <!-- ── Content ───────────────────────────────────────────────────── -->
+    <p class="section-label">Content</p>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Short Summary</mat-label>
+      <textarea matInput formControlName="shortSummary" rows="2"></textarea>
+      <mat-error *ngIf="form.get('shortSummary')?.hasError('required')">Required</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Detailed Description (optional)</mat-label>
+      <textarea matInput formControlName="detailedDescription" rows="4"></textarea>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Scope of Work (optional)</mat-label>
+      <textarea matInput formControlName="scopeOfWork" rows="3"></textarea>
+    </mat-form-field>
+
+    <mat-divider class="section-divider"></mat-divider>
+
+    <!-- ── Products & Services ───────────────────────────────────────── -->
+    <p class="section-label">Products &amp; Services</p>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Products Used</mat-label>
+      <mat-select formControlName="productIds" multiple>
+        <mat-option *ngFor="let p of availableProducts()" [value]="p.id">
+          {{ p.productName }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <div class="services-section">
+      <span class="image-field-label">Services Provided</span>
+      <div class="checkboxes-group">
+        <mat-checkbox *ngFor="let s of serviceOptions"
+          [checked]="isServiceSelected(s.value)"
+          (change)="onServiceChange(s.value, $event.checked)"
+          color="primary">
+          {{ s.label }}
+        </mat-checkbox>
+      </div>
+    </div>
+
+    <mat-divider class="section-divider"></mat-divider>
+
+    <!-- ── Media ─────────────────────────────────────────────────────── -->
+    <p class="section-label">Media</p>
+
+    <!-- Client Logo -->
+    <div class="image-upload-field">
+      <span class="image-field-label">Client Logo (optional)</span>
+      <div *ngIf="logoPreview()" class="image-preview-wrap">
+        <img [src]="logoPreview()!" class="logo-preview" alt="Logo" />
+        <button mat-icon-button type="button" class="remove-btn" (click)="removeLogo()">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+      <input #logoInput type="file" accept="image/*" style="display:none"
+             (change)="onLogoSelect($event)" />
+      <button *ngIf="!logoPreview()" mat-stroked-button type="button"
+              class="select-image-btn" (click)="logoInput.click()">
+        <mat-icon>upload</mat-icon> Upload Logo
+      </button>
+    </div>
+
+    <!-- Project Images -->
+    <div class="image-upload-field">
+      <span class="image-field-label">Project Images (optional)</span>
+      <div *ngIf="imagePreviews().length" class="gallery-preview-grid">
+        <div *ngFor="let img of imagePreviews(); let i = index" class="gallery-preview-item">
+          <img [src]="img" class="gallery-thumb" alt="" />
+          <button mat-icon-button type="button" class="remove-btn small"
+                  (click)="removeImage(i)">
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+      </div>
+      <input #imagesInput type="file" accept="image/*" multiple style="display:none"
+             (change)="onImagesSelect($event)" />
+      <button mat-stroked-button type="button" class="select-image-btn"
+              (click)="imagesInput.click()">
+        <mat-icon>add_photo_alternate</mat-icon> Add Images
+      </button>
+    </div>
+
+    <!-- Project Documents -->
+    <div class="image-upload-field">
+      <span class="image-field-label">Project Documents / PDF (optional)</span>
+      <div *ngIf="documents().length" class="documents-list">
+        <div *ngFor="let doc of documents(); let i = index" class="document-item">
+          <mat-icon class="pdf-icon">picture_as_pdf</mat-icon>
+          <span class="doc-name">{{ doc.fileName }}</span>
+          <button mat-icon-button type="button" (click)="removeDocument(i)">
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+      </div>
+      <input #docsInput type="file" accept="application/pdf" multiple style="display:none"
+             (change)="onDocumentsSelect($event)" />
+      <button mat-stroked-button type="button" class="select-image-btn"
+              (click)="docsInput.click()">
+        <mat-icon>attach_file</mat-icon> Attach PDFs
+      </button>
+    </div>
+
+    <!-- Video URL -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Video URL (optional)</mat-label>
+      <mat-icon matPrefix>videocam</mat-icon>
+      <input matInput formControlName="videoUrl" type="url" placeholder="https://…" />
+      <mat-error *ngIf="form.get('videoUrl')?.hasError('invalidUrl')">Enter a valid URL</mat-error>
+    </mat-form-field>
+
+    <mat-divider class="section-divider"></mat-divider>
+
+    <!-- ── Settings ──────────────────────────────────────────────────── -->
+    <p class="section-label">Settings</p>
+
+    <div class="toggles-row">
+      <mat-slide-toggle formControlName="featured" color="primary">Featured Project</mat-slide-toggle>
+      <mat-slide-toggle formControlName="archived" color="warn">Archived</mat-slide-toggle>
+    </div>
+
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button type="button" (click)="onCancel()">Cancel</button>
+  <button mat-raised-button color="primary" type="button"
+          (click)="onSubmit()" [disabled]="form.invalid || loading()">
+    {{ loading() ? 'Saving…' : 'Save' }}
+  </button>
+</mat-dialog-actions>

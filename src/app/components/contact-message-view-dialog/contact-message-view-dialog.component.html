@@ -1,0 +1,80 @@
+<h2 mat-dialog-title class="view-title">
+  <span>Contact Message</span>
+  <button mat-icon-button (click)="onClose()" class="close-btn">
+    <mat-icon>close</mat-icon>
+  </button>
+</h2>
+
+<mat-dialog-content>
+  <div class="view-body">
+
+    <!-- ── Contact Information ────────────────────────────────────────── -->
+    <p class="section-label">Contact Information</p>
+
+    <div class="info-grid">
+      <div class="info-item">
+        <span class="info-key">Full Name</span>
+        <span class="info-val">{{ fullName }}</span>
+      </div>
+      <div class="info-item">
+        <span class="info-key">Email</span>
+        <span class="info-val info-val--email">{{ msg.email }}</span>
+      </div>
+      <div class="info-item">
+        <span class="info-key">Phone</span>
+        <span class="info-val">{{ msg.phone || '—' }}</span>
+      </div>
+    </div>
+
+    <mat-divider class="section-divider"></mat-divider>
+
+    <!-- ── Message ────────────────────────────────────────────────────── -->
+    <p class="section-label">Message</p>
+
+    <div class="message-box">
+      <p class="message-text">{{ msg.message }}</p>
+    </div>
+
+    <mat-divider class="section-divider"></mat-divider>
+
+    <!-- ── Metadata ───────────────────────────────────────────────────── -->
+    <p class="section-label">Metadata</p>
+
+    <div class="meta-row">
+      <div class="meta-status">
+        <span class="info-key">Status</span>
+        <div class="status-select-row">
+          <span class="badge" [ngClass]="getStatusClass(msg.status)">{{ msg.status }}</span>
+          <button mat-stroked-button [matMenuTriggerFor]="statusMenu"
+                  class="change-status-btn" [disabled]="updatingStatus()">
+            <mat-icon>swap_horiz</mat-icon>
+            {{ updatingStatus() ? 'Updating…' : 'Change Status' }}
+          </button>
+          <mat-menu #statusMenu="matMenu">
+            <button mat-menu-item *ngFor="let opt of statusOptions"
+                    (click)="onStatusChange(opt.value)"
+                    [class.status-current]="msg.status === opt.value">
+              <mat-icon>{{ msg.status === opt.value ? 'check' : 'radio_button_unchecked' }}</mat-icon>
+              <span>{{ opt.label }}</span>
+            </button>
+          </mat-menu>
+        </div>
+      </div>
+
+      <div class="info-item" *ngIf="msg.createdAt">
+        <span class="info-key">Created Date</span>
+        <span class="info-val">{{ msg.createdAt | date:'medium' }}</span>
+      </div>
+
+      <div class="info-item" *ngIf="msg.updatedAt">
+        <span class="info-key">Updated Date</span>
+        <span class="info-val">{{ msg.updatedAt | date:'medium' }}</span>
+      </div>
+    </div>
+
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-raised-button color="primary" (click)="onClose()">Close</button>
+</mat-dialog-actions>

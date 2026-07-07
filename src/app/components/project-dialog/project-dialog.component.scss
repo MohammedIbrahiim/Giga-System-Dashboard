@@ -1,0 +1,173 @@
+.dialog-form {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 4px 0;
+  min-width: 580px;
+}
+
+.full-width { width: 100%; }
+
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  mat-form-field { width: 100%; }
+}
+
+.three-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr 120px;
+  gap: 12px;
+  mat-form-field { width: 100%; }
+}
+
+.section-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #0B5ED7;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  margin: 8px 0 4px;
+}
+
+.section-divider {
+  margin: 8px 0 12px;
+}
+
+.cross-field-error {
+  font-size: 12px;
+  color: #d32f2f;
+  margin-top: -8px;
+  margin-bottom: 4px;
+}
+
+// ─── Services Checkboxes ────────────────────────────────────────────────────
+
+.services-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.checkboxes-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 24px;
+}
+
+// ─── Image Upload ───────────────────────────────────────────────────────────
+
+.image-upload-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.image-field-label {
+  font-size: 13px;
+  color: rgba(0, 0, 0, 0.6);
+  font-weight: 500;
+}
+
+.image-preview-wrap {
+  position: relative;
+  display: inline-block;
+  width: fit-content;
+}
+
+.logo-preview {
+  width: 120px;
+  height: 80px;
+  object-fit: contain;
+  border-radius: 8px;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  background: #fafafa;
+  display: block;
+  padding: 4px;
+}
+
+.gallery-preview-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.gallery-preview-item {
+  position: relative;
+  display: inline-block;
+}
+
+.gallery-thumb {
+  width: 72px;
+  height: 72px;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  display: block;
+}
+
+.remove-btn {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  background: #fff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+  width: 24px;
+  height: 24px;
+  line-height: 24px;
+
+  &.small {
+    width: 20px;
+    height: 20px;
+    line-height: 20px;
+    mat-icon { font-size: 14px; width: 14px; height: 14px; }
+  }
+}
+
+.select-image-btn { align-self: flex-start; }
+
+// ─── Documents list ─────────────────────────────────────────────────────────
+
+.documents-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.document-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  background: rgba(0, 0, 0, 0.03);
+  border-radius: 6px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.pdf-icon {
+  color: #d32f2f;
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+}
+
+.doc-name {
+  flex: 1;
+  font-size: 13px;
+  color: #1e293b;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+// ─── Toggles ────────────────────────────────────────────────────────────────
+
+.toggles-row {
+  display: flex;
+  gap: 32px;
+  align-items: center;
+  padding: 4px 0 8px;
+}

@@ -1,0 +1,183 @@
+<div class="filter-bar">
+
+  <!-- Search -->
+  <mat-form-field appearance="outline" class="filter-field filter-field--search">
+    <mat-label>{{ searchPlaceholder }}</mat-label>
+    <input matInput [formControl]="searchCtrl">
+    <mat-icon matSuffix>search</mat-icon>
+  </mat-form-field>
+
+  <!-- Category (enum SelectOption[]) -->
+  <mat-form-field *ngIf="showCategory && categorySelectOptions.length" appearance="outline" class="filter-field">
+    <mat-label>{{ categoryLabel }}</mat-label>
+    <mat-select [formControl]="categoryCtrl">
+      <mat-option value="">All</mat-option>
+      <mat-option *ngFor="let opt of categorySelectOptions" [value]="opt.value">{{ opt.label }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <!-- Category (plain strings, legacy) -->
+  <mat-form-field *ngIf="showCategory && !categorySelectOptions.length" appearance="outline" class="filter-field">
+    <mat-label>{{ categoryLabel }}</mat-label>
+    <mat-select [formControl]="categoryCtrl">
+      <mat-option value="">All</mat-option>
+      <mat-option *ngFor="let opt of categoryOptions" [value]="opt">{{ opt }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <!-- Status -->
+  <mat-form-field *ngIf="showStatus" appearance="outline" class="filter-field">
+    <mat-label>Status</mat-label>
+    <mat-select [formControl]="statusCtrl">
+      <mat-option value="">All Statuses</mat-option>
+      <mat-option *ngFor="let opt of statusOptions" [value]="opt.value">{{ opt.label }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <!-- Country -->
+  <mat-form-field *ngIf="showCountry" appearance="outline" class="filter-field">
+    <mat-label>Country</mat-label>
+    <mat-select [formControl]="countryCtrl">
+      <mat-option value="">All Countries</mat-option>
+      <mat-option *ngFor="let opt of countryOptions" [value]="opt">{{ opt }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <!-- Year -->
+  <mat-form-field *ngIf="showYear" appearance="outline" class="filter-field">
+    <mat-label>Year</mat-label>
+    <mat-select [formControl]="yearCtrl">
+      <mat-option value="">All Years</mat-option>
+      <mat-option *ngFor="let opt of yearOptions" [value]="opt.value">{{ opt.label }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <!-- Team -->
+  <mat-form-field *ngIf="showTeam" appearance="outline" class="filter-field">
+    <mat-label>Team</mat-label>
+    <mat-select [formControl]="teamCtrl">
+      <mat-option value="">All Teams</mat-option>
+      <mat-option *ngFor="let opt of teamOptions" [value]="opt">{{ opt }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <!-- Brand -->
+  <mat-form-field *ngIf="showBrand" appearance="outline" class="filter-field">
+    <mat-label>Brand</mat-label>
+    <mat-select [formControl]="brandCtrl">
+      <mat-option value="">All Brands</mat-option>
+      <mat-option *ngFor="let opt of brandOptions" [value]="opt">{{ opt }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <!-- Subcategory (SelectOption[]) -->
+  <mat-form-field *ngIf="showSubcategory && subcategorySelectOptions.length" appearance="outline" class="filter-field">
+    <mat-label>Subcategory</mat-label>
+    <mat-select [formControl]="subcategoryCtrl">
+      <mat-option value="">All Subcategories</mat-option>
+      <mat-option *ngFor="let opt of subcategorySelectOptions" [value]="opt.value">{{ opt.label }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <!-- Subcategory (plain strings, legacy) -->
+  <mat-form-field *ngIf="showSubcategory && !subcategorySelectOptions.length && subcategoryOptions.length" appearance="outline" class="filter-field">
+    <mat-label>Subcategory</mat-label>
+    <mat-select [formControl]="subcategoryCtrl">
+      <mat-option value="">All Subcategories</mat-option>
+      <mat-option *ngFor="let opt of subcategoryOptions" [value]="opt">{{ opt }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <!-- Stock Status -->
+  <mat-form-field *ngIf="showStockStatus" appearance="outline" class="filter-field">
+    <mat-label>Stock Status</mat-label>
+    <mat-select [formControl]="stockStatusCtrl">
+      <mat-option value="">All</mat-option>
+      <mat-option *ngFor="let opt of stockStatusOptions" [value]="opt.value">{{ opt.label }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <!-- Featured -->
+  <mat-form-field *ngIf="showFeatured" appearance="outline" class="filter-field">
+    <mat-label>Featured</mat-label>
+    <mat-select [formControl]="featuredCtrl">
+      <mat-option value="">All</mat-option>
+      <mat-option value="true">Featured</mat-option>
+      <mat-option value="false">Not Featured</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <!-- Pinned -->
+  <mat-form-field *ngIf="showPinned" appearance="outline" class="filter-field">
+    <mat-label>Pinned</mat-label>
+    <mat-select [formControl]="pinnedCtrl">
+      <mat-option value="">All</mat-option>
+      <mat-option value="true">Pinned</mat-option>
+      <mat-option value="false">Not Pinned</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <!-- Archived -->
+  <mat-form-field *ngIf="showArchived" appearance="outline" class="filter-field">
+    <mat-label>Archived</mat-label>
+    <mat-select [formControl]="archivedCtrl">
+      <mat-option value="">All</mat-option>
+      <mat-option value="false">Active</mat-option>
+      <mat-option value="true">Archived</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <!-- Date Range -->
+  <mat-form-field *ngIf="showDateRange" appearance="outline" class="filter-field filter-field--date">
+    <mat-label>Date Range</mat-label>
+    <mat-date-range-input [rangePicker]="picker" [formGroup]="dateRangeGroup">
+      <input matStartDate formControlName="start" placeholder="From">
+      <input matEndDate   formControlName="end"   placeholder="To">
+    </mat-date-range-input>
+    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-date-range-picker #picker></mat-date-range-picker>
+  </mat-form-field>
+
+  <!-- Price Range -->
+  <div *ngIf="showPriceRange" class="range-group">
+    <mat-form-field appearance="outline" class="filter-field filter-field--sm">
+      <mat-label>Min Price ($)</mat-label>
+      <input matInput type="number" [formControl]="minPriceCtrl" min="0">
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="filter-field filter-field--sm">
+      <mat-label>Max Price ($)</mat-label>
+      <input matInput type="number" [formControl]="maxPriceCtrl" min="0">
+    </mat-form-field>
+  </div>
+
+  <!-- Stock Range -->
+  <div *ngIf="showStockRange" class="range-group">
+    <mat-form-field appearance="outline" class="filter-field filter-field--sm">
+      <mat-label>Min Stock</mat-label>
+      <input matInput type="number" [formControl]="minStockCtrl" min="0">
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="filter-field filter-field--sm">
+      <mat-label>Max Stock</mat-label>
+      <input matInput type="number" [formControl]="maxStockCtrl" min="0">
+    </mat-form-field>
+  </div>
+
+  <!-- Progress Range -->
+  <div *ngIf="showProgressRange" class="range-group">
+    <mat-form-field appearance="outline" class="filter-field filter-field--sm">
+      <mat-label>Min Progress (%)</mat-label>
+      <input matInput type="number" [formControl]="minProgressCtrl" min="0" max="100">
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="filter-field filter-field--sm">
+      <mat-label>Max Progress (%)</mat-label>
+      <input matInput type="number" [formControl]="maxProgressCtrl" min="0" max="100">
+    </mat-form-field>
+  </div>
+
+  <!-- Clear -->
+  <button mat-stroked-button class="clear-btn" (click)="clear()" title="Clear all filters">
+    <mat-icon>filter_alt_off</mat-icon>
+    Clear
+  </button>
+
+</div>

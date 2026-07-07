@@ -1,0 +1,200 @@
+<div class="page-container">
+
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">News</h1>
+      <p class="page-subtitle">{{ totalElements() }} articles</p>
+    </div>
+    <button mat-raised-button color="primary" (click)="openAddDialog()">
+      <mat-icon>add</mat-icon>
+      Add Article
+    </button>
+  </div>
+
+  <!-- Filters -->
+  <app-filter-bar
+    searchPlaceholder="Search articles…"
+    [showCategory]="true"
+    categoryLabel="Category"
+    [categorySelectOptions]="categorySelectOptions"
+    [showStatus]="true"
+    [statusOptions]="statusSelectOptions"
+    [showFeatured]="true"
+    [showPinned]="true"
+    [showDateRange]="true"
+    (filtersChange)="onFiltersChange($event)">
+  </app-filter-bar>
+
+  <!-- Table Card -->
+  <mat-card class="table-card">
+    <mat-progress-bar *ngIf="loading()" mode="indeterminate" class="loading-bar"></mat-progress-bar>
+
+    <mat-card-content>
+      <div class="table-wrapper">
+        <table mat-table [dataSource]="articles()" matSort (matSortChange)="onSortChange($event)"
+               class="full-width">
+
+          <!-- # -->
+          <ng-container matColumnDef="index">
+            <th mat-header-cell *matHeaderCellDef>#</th>
+            <td mat-cell *matCellDef="let a; let i = index">{{ pageIndex() * pageSize() + i + 1 }}</td>
+          </ng-container>
+
+          <!-- Cover -->
+          <ng-container matColumnDef="cover">
+            <th mat-header-cell *matHeaderCellDef>Cover</th>
+            <td mat-cell *matCellDef="let a">
+              <div class="cover-cell">
+                <img *ngIf="a.coverImageBase64"
+                     [src]="formatImage(a.coverImageBase64)"
+                     class="cover-thumb" alt="" />
+                <div *ngIf="!a.coverImageBase64" class="cover-placeholder">
+                  <mat-icon>image</mat-icon>
+                </div>
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- Title -->
+          <ng-container matColumnDef="title">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header="title">Title</th>
+            <td mat-cell *matCellDef="let a">
+              <div class="title-cell">
+                <span class="title-text">{{ a.title }}</span>
+                <span *ngIf="a.shortDescription" class="short-desc">{{ a.shortDescription }}</span>
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- Category -->
+          <ng-container matColumnDef="category">
+            <th mat-header-cell *matHeaderCellDef>Category</th>
+            <td mat-cell *matCellDef="let a">
+              <span class="badge category-badge" [ngClass]="getCategoryClass(a.category)">
+                {{ getCategoryLabel(a.category) }}
+              </span>
+            </td>
+          </ng-container>
+
+          <!-- Status -->
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef>Status</th>
+            <td mat-cell *matCellDef="let a">
+              <span class="badge status-badge" [ngClass]="getStatusClass(a.status)">
+                {{ getStatusLabel(a.status) }}
+              </span>
+            </td>
+          </ng-container>
+
+          <!-- Featured -->
+          <ng-container matColumnDef="featured">
+            <th mat-header-cell *matHeaderCellDef>Featured</th>
+            <td mat-cell *matCellDef="let a">
+              <mat-slide-toggle
+                [checked]="a.featured ?? false"
+                (change)="onToggleFeatured(a, $event.checked)"
+                color="primary">
+              </mat-slide-toggle>
+            </td>
+          </ng-container>
+
+          <!-- Pinned -->
+          <ng-container matColumnDef="pinned">
+            <th mat-header-cell *matHeaderCellDef>Pinned</th>
+            <td mat-cell *matCellDef="let a">
+              <mat-slide-toggle
+                [checked]="a.pinned ?? false"
+                (change)="onTogglePinned(a, $event.checked)"
+                color="primary">
+              </mat-slide-toggle>
+            </td>
+          </ng-container>
+
+          <!-- Author -->
+          <ng-container matColumnDef="author">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header="author">Author</th>
+            <td mat-cell *matCellDef="let a" class="author-cell">{{ a.author }}</td>
+          </ng-container>
+
+          <!-- Publish Date -->
+          <ng-container matColumnDef="publishDate">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header="publishDate">Published</th>
+            <td mat-cell *matCellDef="let a" class="date-cell">
+              {{ a.publishDate | date:'mediumDate' }}
+            </td>
+          </ng-container>
+
+          <!-- Images -->
+          <ng-container matColumnDef="images">
+            <th mat-header-cell *matHeaderCellDef>Images</th>
+            <td mat-cell *matCellDef="let a">
+              <div class="gallery-thumbs" *ngIf="a.images?.length; else noImages">
+                <img *ngFor="let img of a.images.slice(0, 4)"
+                     [src]="formatImage(img.imageBase64)"
+                     class="gallery-thumb" alt="" />
+                <span class="gallery-more" *ngIf="a.images.length > 4">
+                  +{{ a.images.length - 4 }}
+                </span>
+              </div>
+              <ng-template #noImages><span class="no-images">—</span></ng-template>
+            </td>
+          </ng-container>
+
+          <!-- Actions -->
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef class="actions-header"></th>
+            <td mat-cell *matCellDef="let a" class="actions-cell">
+              <button mat-icon-button color="primary"
+                      (click)="openEditDialog(a)" matTooltip="Edit">
+                <mat-icon>edit</mat-icon>
+              </button>
+
+              <button mat-icon-button [matMenuTriggerFor]="moreMenu"
+                      matTooltip="More actions">
+                <mat-icon>more_vert</mat-icon>
+              </button>
+              <mat-menu #moreMenu="matMenu">
+                <button mat-menu-item *ngIf="a.status !== 'PUBLISHED'" (click)="onPublish(a)">
+                  <mat-icon>publish</mat-icon>
+                  <span>Publish</span>
+                </button>
+                <button mat-menu-item *ngIf="a.status === 'PUBLISHED'" (click)="onUnpublish(a)">
+                  <mat-icon>unpublished</mat-icon>
+                  <span>Unpublish</span>
+                </button>
+                <button mat-menu-item *ngIf="a.status !== 'ARCHIVED'" (click)="onArchive(a)">
+                  <mat-icon>archive</mat-icon>
+                  <span>Archive</span>
+                </button>
+                <button mat-menu-item (click)="onDelete(a)">
+                  <mat-icon color="warn">delete</mat-icon>
+                  <span class="delete-label">Delete</span>
+                </button>
+              </mat-menu>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="table-row"></tr>
+
+          <tr class="mat-row no-data-row" *matNoDataRow>
+            <td class="mat-cell" [attr.colspan]="displayedColumns.length">
+              No articles found.
+            </td>
+          </tr>
+
+        </table>
+      </div>
+    </mat-card-content>
+
+    <mat-paginator
+      [length]="totalElements()"
+      [pageSize]="pageSize()"
+      [pageIndex]="pageIndex()"
+      [pageSizeOptions]="[5, 10, 25, 50]"
+      showFirstLastButtons
+      (page)="onPageChange($event)">
+    </mat-paginator>
+  </mat-card>
+
+</div>

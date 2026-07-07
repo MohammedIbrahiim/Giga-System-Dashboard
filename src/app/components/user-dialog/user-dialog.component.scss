@@ -1,0 +1,121 @@
+mat-dialog-content {
+  min-width: 440px;
+  padding-top: 8px !important;
+}
+
+.dialog-form {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.full-width { width: 100%; }
+
+// ─── Admin checkbox ────────────────────────────────────────────────────────
+
+.checkbox-row {
+  margin: 8px 0 12px;
+}
+
+.checkbox-hint {
+  margin: 4px 0 0 28px;
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.45);
+}
+
+.super-admin-note {
+  color: #7b1fa2;
+}
+
+// ─── Profile image upload ──────────────────────────────────────────────────
+
+.image-upload-field {
+  margin-bottom: 12px;
+}
+
+.image-field-label {
+  display: block;
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.6);
+  margin-bottom: 8px;
+}
+
+.image-preview-wrap {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 8px;
+
+  .remove-btn {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    background: white;
+    width: 28px;
+    height: 28px;
+    line-height: 28px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+
+    mat-icon { font-size: 16px; width: 16px; height: 16px; }
+  }
+}
+
+.image-preview {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 2px solid rgba(0, 0, 0, 0.12);
+  display: block;
+}
+
+.select-image-btn {
+  width: 100%;
+  border-style: dashed !important;
+  color: rgba(0, 0, 0, 0.5);
+}
+
+// ─── Outline field styles (matching existing dialogs) ──────────────────────
+
+::ng-deep .mat-mdc-form-field.mat-form-field-appearance-outline {
+  .mdc-notched-outline__leading,
+  .mdc-notched-outline__notch,
+  .mdc-notched-outline__trailing {
+    border-color: rgba(0, 0, 0, 0.18) !important;
+    transition: border-color 0.2s ease, border-width 0.15s ease;
+  }
+
+  &:not(.mat-form-field-disabled):hover {
+    .mdc-notched-outline__leading,
+    .mdc-notched-outline__notch,
+    .mdc-notched-outline__trailing {
+      border-color: #0B5ED7 !important;
+    }
+  }
+
+  &.mat-focused {
+    .mdc-notched-outline__leading,
+    .mdc-notched-outline__notch,
+    .mdc-notched-outline__trailing {
+      border-color: #0B5ED7 !important;
+      border-width: 2px !important;
+    }
+    .mat-mdc-floating-label { color: #0B5ED7 !important; }
+  }
+
+  &.mat-form-field-invalid {
+    .mdc-notched-outline__leading,
+    .mdc-notched-outline__notch,
+    .mdc-notched-outline__trailing {
+      border-color: #e53935 !important;
+      border-width: 2px !important;
+    }
+    .mat-mdc-floating-label { color: #e53935 !important; }
+  }
+}
+
+::ng-deep .mat-mdc-form-field-required-marker { color: #e53935 !important; }
+
+::ng-deep .mat-mdc-form-field-error {
+  color: #e53935;
+  font-size: 11.5px;
+}

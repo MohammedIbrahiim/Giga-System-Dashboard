@@ -1,0 +1,116 @@
+@import '../../../page-layout';
+
+// ─── Table card ────────────────────────────────────────────────────────────
+
+.table-card {
+  position: relative;
+  margin-bottom: 24px;
+}
+
+.loading-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  border-radius: 4px 4px 0 0;
+  z-index: 1;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.no-data-row td {
+  padding: 20px;
+  text-align: center;
+  color: #9e9e9e;
+}
+
+.table-row:hover {
+  background: rgba(0, 0, 0, 0.02);
+}
+
+// ─── Avatar ────────────────────────────────────────────────────────────────
+
+.user-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #0B5ED7 0%, #1565C0 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.avatar-initials {
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+  letter-spacing: 0.5px;
+}
+
+// ─── Role badges ───────────────────────────────────────────────────────────
+
+.role-badge {
+  display: inline-block;
+  padding: 3px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.badge-super-admin {
+  background: rgba(99, 102, 241, 0.12);
+  color: #4f46e5;
+  border: 1px solid rgba(99, 102, 241, 0.3);
+}
+
+.badge-admin {
+  background: rgba(22, 163, 74, 0.1);
+  color: #15803d;
+  border: 1px solid rgba(22, 163, 74, 0.25);
+}
+
+.badge-member {
+  background: rgba(0, 0, 0, 0.06);
+  color: #616161;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+// ─── Cells ─────────────────────────────────────────────────────────────────
+
+.name-cell {
+  font-weight: 500;
+  color: #1e293b;
+}
+
+.email-cell {
+  color: rgba(0, 0, 0, 0.6);
+  font-size: 13.5px;
+}
+
+.date-cell {
+  color: rgba(0, 0, 0, 0.55);
+  font-size: 13.5px;
+  white-space: nowrap;
+}
+
+.actions-header,
+.actions-cell {
+  width: 80px;
+  white-space: nowrap;
+  text-align: right;
+}

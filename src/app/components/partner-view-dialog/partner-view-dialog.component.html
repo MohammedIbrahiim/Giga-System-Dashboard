@@ -1,0 +1,75 @@
+<h2 mat-dialog-title class="view-dialog-title">
+  <span>Partner Details</span>
+  <button mat-icon-button mat-dialog-close class="close-btn">
+    <mat-icon>close</mat-icon>
+  </button>
+</h2>
+
+<mat-dialog-content>
+  <div class="view-body">
+
+    <!-- Header: logo + name + slug + status -->
+    <div class="view-header">
+      <div class="view-logo-wrap" *ngIf="partner.logoBase64">
+        <img [src]="formatImage(partner.logoBase64)" class="view-logo-img" alt="Logo" />
+      </div>
+      <div class="view-title-block">
+        <span class="view-name">{{ partner.name }}</span>
+        <span class="view-slug">{{ partner.slug }}</span>
+        <span class="view-badge"
+              [class.badge-active]="partner.active"
+              [class.badge-inactive]="!partner.active">
+          {{ partner.active ? 'Active' : 'Inactive' }}
+        </span>
+      </div>
+    </div>
+
+    <!-- Partner image -->
+    <div *ngIf="partner.imageBase64" class="view-image-wrap">
+      <img [src]="formatImage(partner.imageBase64)" class="view-partner-img" alt="" />
+    </div>
+
+    <mat-divider class="view-divider"></mat-divider>
+
+    <p class="section-label">Short Description</p>
+    <p class="view-text">{{ partner.shortDescription }}</p>
+
+    <mat-divider class="view-divider"></mat-divider>
+
+    <p class="section-label">Full Description</p>
+    <p class="view-text view-text--pre">{{ partner.fullDescription }}</p>
+
+    <ng-container *ngIf="partner.whatWeOffer?.length">
+      <mat-divider class="view-divider"></mat-divider>
+      <p class="section-label">What We Offer</p>
+      <ul class="offer-list">
+        <li *ngFor="let item of partner.whatWeOffer" class="offer-item">
+          <mat-icon class="offer-icon">check_circle</mat-icon>
+          <span>{{ item }}</span>
+        </li>
+      </ul>
+    </ng-container>
+
+    <mat-divider class="view-divider"></mat-divider>
+
+    <div class="view-meta">
+      <div class="meta-item">
+        <span class="meta-label">Sort Order</span>
+        <span class="meta-value">{{ partner.sortOrder }}</span>
+      </div>
+      <div class="meta-item" *ngIf="partner.createdAt">
+        <span class="meta-label">Created</span>
+        <span class="meta-value">{{ partner.createdAt | date:'mediumDate' }}</span>
+      </div>
+      <div class="meta-item" *ngIf="partner.updatedAt">
+        <span class="meta-label">Updated</span>
+        <span class="meta-value">{{ partner.updatedAt | date:'mediumDate' }}</span>
+      </div>
+    </div>
+
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Close</button>
+</mat-dialog-actions>

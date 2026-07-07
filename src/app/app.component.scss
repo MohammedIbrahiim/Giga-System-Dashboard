@@ -1,0 +1,206 @@
+.sidenav-container {
+  height: 100vh;
+}
+
+// ─── Sidebar ───────────────────────────────────────────────────────────────
+
+.sidenav {
+  width: 256px;
+  background: linear-gradient(180deg, #0d1b2a 0%, #1a2c45 100%);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  border-right: none !important;
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 22px 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+
+    .brand-logo {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #0B5ED7, #1565C0);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      mat-icon { color: white; font-size: 20px; width: 20px; height: 20px; }
+    }
+
+    .brand-name {
+      font-size: 17px;
+      font-weight: 600;
+      letter-spacing: 0.2px;
+    }
+  }
+
+  .nav-list {
+    flex: 1;
+    padding: 10px 0;
+  }
+
+  .nav-section-label {
+    padding: 14px 20px 4px;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: rgba(255, 255, 255, 0.3);
+  }
+
+  ::ng-deep .mat-mdc-list-item {
+    color: rgba(255, 255, 255, 0.9) !important;
+    border-radius: 10px;
+    margin: 1px 10px;
+    width: calc(100% - 20px) !important;
+    transition: background 0.15s ease, color 0.15s ease;
+
+    .mat-icon { color: rgba(255, 255, 255, 0.45); }
+
+    &.active-link {
+      background: rgba(11, 94, 215, 0.28) !important;
+      color: #fff !important;
+      box-shadow: inset 3px 0 0 #60a5fa;
+      .mat-icon { color: #93c5fd; }
+      span { font-weight: 600; }
+    }
+
+    &:hover:not(.active-link) {
+      background: rgba(255, 255, 255, 0.13) !important;
+      color: rgba(255, 255, 255, 0.95) !important;
+    }
+  }
+
+  .sidenav-footer {
+    padding: 14px 16px;
+    border-top: 1px solid rgba(255, 255, 255, 0.07);
+  }
+
+  .user-mini {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .user-mini-avatar {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #0B5ED7, #1565C0);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 600;
+    flex-shrink: 0;
+    overflow: hidden;
+  }
+
+  .user-mini-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+
+  .user-mini-info {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .user-mini-name {
+    font-size: 13px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.88);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .user-mini-role {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.4);
+  }
+}
+
+// ─── Toolbar ───────────────────────────────────────────────────────────────
+
+.toolbar {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+
+  .toolbar-title {
+    font-size: 16px;
+    font-weight: 500;
+    margin-left: 8px;
+    letter-spacing: 0.3px;
+  }
+
+  .spacer { flex: 1; }
+
+  .profile-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-left: 6px;
+    border-radius: 24px;
+    padding: 4px 10px 4px 6px;
+    height: 40px;
+    min-width: 0;
+
+    .toolbar-avatar {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.22);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+
+    .toolbar-avatar-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .toolbar-username {
+      font-size: 13px;
+      font-weight: 500;
+      text-align: center;
+
+      @media (max-width: 599px) { display: none; }
+    }
+
+    .dropdown-icon {
+      font-size: 18px;
+      width: 18px;
+      height: 18px;
+      opacity: 0.8;
+    }
+  }
+}
+
+// ─── Profile Menu (in overlay — use global styles in styles.scss) ────────
+
+// ─── Page content ─────────────────────────────────────────────────────────
+
+.page-content {
+  padding: 24px;
+  background: #f0f2f5;
+  min-height: calc(100vh - 64px);
+}
+.mdc-list-item__primary-text{
+  color: white !important;
+}

@@ -1,0 +1,115 @@
+<div class="page-container">
+
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Users</h1>
+      <p class="page-subtitle">{{ users().length }} registered users</p>
+    </div>
+    <button mat-raised-button color="primary" (click)="openAddDialog()">
+      <mat-icon>person_add</mat-icon>
+      Add User
+    </button>
+  </div>
+
+  <mat-card class="table-card">
+    <mat-progress-bar *ngIf="loading()" mode="indeterminate" class="loading-bar"></mat-progress-bar>
+
+    <mat-card-content>
+      <div class="table-wrapper">
+        <table mat-table [dataSource]="users()" class="full-width">
+
+          <!-- # -->
+          <ng-container matColumnDef="index">
+            <th mat-header-cell *matHeaderCellDef>#</th>
+            <td mat-cell *matCellDef="let user; let i = index">{{ i + 1 }}</td>
+          </ng-container>
+
+          <!-- Avatar -->
+          <ng-container matColumnDef="avatar">
+            <th mat-header-cell *matHeaderCellDef>Avatar</th>
+            <td mat-cell *matCellDef="let user">
+              <div class="user-avatar">
+                <img *ngIf="user.profileImageBase64"
+                     [src]="formatImage(user.profileImageBase64)"
+                     class="avatar-img" alt="" />
+                <span *ngIf="!user.profileImageBase64" class="avatar-initials">
+                  {{ getInitials(user.name) }}
+                </span>
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- Name -->
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef>Name</th>
+            <td mat-cell *matCellDef="let user" class="name-cell">{{ user.name }}</td>
+          </ng-container>
+
+          <!-- Email -->
+          <ng-container matColumnDef="email">
+            <th mat-header-cell *matHeaderCellDef>Email</th>
+            <td mat-cell *matCellDef="let user" class="email-cell">{{ user.email }}</td>
+          </ng-container>
+
+          <!-- Role -->
+          <ng-container matColumnDef="role">
+            <th mat-header-cell *matHeaderCellDef>Role</th>
+            <td mat-cell *matCellDef="let user">
+              <span class="role-badge" [ngClass]="getRoleBadgeClass(user.role)">
+                {{ getRoleDisplay(user.role) }}
+              </span>
+            </td>
+          </ng-container>
+
+          <!-- Admin -->
+          <ng-container matColumnDef="admin">
+            <th mat-header-cell *matHeaderCellDef>Admin</th>
+            <td mat-cell *matCellDef="let user">
+              <mat-checkbox
+                [checked]="user.role === 'ADMIN' || user.role === 'SUPER_ADMIN'"
+                [disabled]="user.role === 'SUPER_ADMIN'"
+                (change)="onRoleToggle(user, $event.checked)"
+                color="primary">
+              </mat-checkbox>
+            </td>
+          </ng-container>
+
+          <!-- Created At -->
+          <ng-container matColumnDef="createdAt">
+            <th mat-header-cell *matHeaderCellDef>Created</th>
+            <td mat-cell *matCellDef="let user" class="date-cell">
+              {{ user.createdAt | date:'mediumDate' }}
+            </td>
+          </ng-container>
+
+          <!-- Actions -->
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef class="actions-header"></th>
+            <td mat-cell *matCellDef="let user" class="actions-cell">
+              <button mat-icon-button color="primary"
+                      (click)="openEditDialog(user)" title="Edit user">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button mat-icon-button color="warn"
+                      *ngIf="user.role !== 'SUPER_ADMIN'"
+                      (click)="onDelete(user)" title="Delete user">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="table-row"></tr>
+
+          <tr class="mat-row no-data-row" *matNoDataRow>
+            <td class="mat-cell" [attr.colspan]="displayedColumns.length">
+              No users found.
+            </td>
+          </tr>
+
+        </table>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+</div>

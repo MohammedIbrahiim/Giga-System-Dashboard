@@ -1,0 +1,347 @@
+.dialog-form {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 4px 0;
+  min-width: 620px;
+}
+
+.full-width { width: 100%; }
+
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  mat-form-field { width: 100%; }
+}
+
+.three-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 12px;
+  mat-form-field { width: 100%; }
+}
+
+.section-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #0B5ED7;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  margin: 8px 0 4px;
+}
+
+.section-divider {
+  margin: 8px 0 12px;
+}
+
+.metadata-loading-bar {
+  margin: 0 0 10px;
+  border-radius: 4px;
+}
+
+// ─── Image Upload ───────────────────────────────────────────────────────────
+
+.image-upload-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.image-field-label {
+  font-size: 13px;
+  color: rgba(0, 0, 0, 0.6);
+  font-weight: 500;
+}
+
+.gallery-hint {
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.45);
+  margin: 0 0 4px;
+}
+
+.select-file-btn { align-self: flex-start; }
+
+// ─── Gallery Drag & Drop Grid ────────────────────────────────────────────────
+
+.gallery-drop-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(96px, 96px));
+  gap: 12px;
+  align-items: start;
+}
+
+.gallery-item {
+  position: relative;
+  width: 96px;
+  height: 96px;
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: grab;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  background: #fafafa;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+
+  &:active { cursor: grabbing; }
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    pointer-events: none;
+  }
+}
+
+.remove-image-btn {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  width: 20px !important;
+  height: 20px !important;
+  line-height: 20px !important;
+  padding: 0 !important;
+  background: rgba(255, 255, 255, 0.92) !important;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+  border-radius: 50% !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+  z-index: 2;
+
+  mat-icon {
+    font-size: 13px;
+    width: 13px;
+    height: 13px;
+    line-height: 13px;
+    color: rgba(0, 0, 0, 0.65);
+  }
+}
+
+.main-badge {
+  position: absolute;
+  bottom: 5px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(11, 94, 215, 0.88);
+  color: #fff;
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  padding: 2px 7px;
+  border-radius: 4px;
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 2;
+}
+
+// Placeholder shown while dragging
+.gallery-drag-placeholder {
+  width: 96px;
+  height: 96px;
+  border-radius: 12px;
+  background: rgba(11, 94, 215, 0.07);
+  border: 2px dashed rgba(11, 94, 215, 0.35);
+}
+
+// Preview floating under cursor
+.cdk-drag-preview {
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.22);
+  border-radius: 12px;
+  overflow: hidden;
+  opacity: 0.95;
+}
+
+.cdk-drag-animating {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.gallery-drop-grid.cdk-drop-list-dragging .gallery-item:not(.cdk-drag-placeholder) {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+// ─── Documents ──────────────────────────────────────────────────────────────
+
+.document-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  background: rgba(0, 0, 0, 0.03);
+  border-radius: 6px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  align-self: flex-start;
+}
+
+.pdf-icon {
+  color: #d32f2f;
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+}
+
+.doc-name {
+  flex: 1;
+  font-size: 13px;
+  color: #1e293b;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 320px;
+}
+
+// ─── Technical Specifications Table ─────────────────────────────────────────
+
+.specs-table {
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+
+.specs-header {
+  display: grid;
+  grid-template-columns: 1fr 1fr 100px 40px;
+  gap: 0;
+  background: #f1f5f9;
+  padding: 8px 12px;
+
+  span {
+    font-size: 11.5px;
+    font-weight: 600;
+    color: rgba(0, 0, 0, 0.55);
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+  }
+}
+
+.specs-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 100px 40px;
+  gap: 0;
+  align-items: center;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  padding: 4px 12px;
+
+  &:hover { background: rgba(0, 0, 0, 0.01); }
+}
+
+.spec-input {
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 13px;
+  color: #1e293b;
+  padding: 6px 4px;
+  width: 100%;
+
+  &::placeholder { color: rgba(0, 0, 0, 0.3); }
+  &--unit { color: rgba(0, 0, 0, 0.5); }
+}
+
+// ─── Filter Selector (dynamic filter type + values) ─────────────────────────
+
+.filter-selector-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  align-items: start;
+  margin-bottom: 4px;
+
+  mat-form-field { width: 100%; }
+
+  &.subcategory-row {
+    align-items: center;
+  }
+}
+
+.filter-type-placeholder {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 56px;
+  padding-left: 4px;
+  color: rgba(0, 0, 0, 0.55);
+  font-size: 13px;
+  font-weight: 500;
+
+  .sub-arrow {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+    color: #0B5ED7;
+  }
+}
+
+// ─── Filter Chips ─────────────────────────────────────────────────────────────
+
+.filter-chips-area {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin: 4px 0 12px;
+  padding: 10px 12px;
+  background: rgba(11, 94, 215, 0.04);
+  border: 1px solid rgba(11, 94, 215, 0.12);
+  border-radius: 8px;
+
+  mat-chip-set {
+    flex: 1;
+  }
+}
+
+.chip-group-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: #0B5ED7;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.clear-filters-btn {
+  flex-shrink: 0;
+  font-size: 12px;
+
+  mat-icon {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+    vertical-align: middle;
+    margin-right: 2px;
+  }
+}
+
+// ─── Category Required Notice ─────────────────────────────────────────────────
+
+.category-required-notice {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 4px 0 8px;
+  padding: 10px 14px;
+  background: rgba(239, 68, 68, 0.06);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  border-radius: 8px;
+  color: #b91c1c;
+  font-size: 13px;
+
+  mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+  }
+}
+
+// ─── Chip Fields ─────────────────────────────────────────────────────────────
+
+.chip-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 4px;
+}

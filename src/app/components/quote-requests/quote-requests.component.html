@@ -1,0 +1,214 @@
+<div class="page-container">
+
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Quote Requests</h1>
+      <p class="page-subtitle">{{ totalElements() }} request{{ totalElements() !== 1 ? 's' : '' }}</p>
+    </div>
+  </div>
+
+  <!-- Stats Cards -->
+  <div class="stats-grid" *ngIf="stats()">
+    <mat-card class="stat-card">
+      <div class="stat-icon-wrap stat-icon-wrap--total">
+        <mat-icon>inbox</mat-icon>
+      </div>
+      <div class="stat-info">
+        <div class="stat-value">{{ stats()!.total }}</div>
+        <div class="stat-label">Total Requests</div>
+      </div>
+    </mat-card>
+
+    <mat-card class="stat-card">
+      <div class="stat-icon-wrap stat-icon-wrap--new">
+        <mat-icon>fiber_new</mat-icon>
+      </div>
+      <div class="stat-info">
+        <div class="stat-value">{{ stats()!.newCount }}</div>
+        <div class="stat-label">New</div>
+      </div>
+    </mat-card>
+
+    <mat-card class="stat-card">
+      <div class="stat-icon-wrap stat-icon-wrap--reviewed">
+        <mat-icon>rate_review</mat-icon>
+      </div>
+      <div class="stat-info">
+        <div class="stat-value">{{ stats()!.reviewed }}</div>
+        <div class="stat-label">Reviewed</div>
+      </div>
+    </mat-card>
+
+    <mat-card class="stat-card">
+      <div class="stat-icon-wrap stat-icon-wrap--contacted">
+        <mat-icon>contact_phone</mat-icon>
+      </div>
+      <div class="stat-info">
+        <div class="stat-value">{{ stats()!.contacted }}</div>
+        <div class="stat-label">Contacted</div>
+      </div>
+    </mat-card>
+
+    <mat-card class="stat-card">
+      <div class="stat-icon-wrap stat-icon-wrap--closed">
+        <mat-icon>check_circle</mat-icon>
+      </div>
+      <div class="stat-info">
+        <div class="stat-value">{{ stats()!.closed }}</div>
+        <div class="stat-label">Closed</div>
+      </div>
+    </mat-card>
+  </div>
+
+  <!-- Filters -->
+  <app-filter-bar
+    searchPlaceholder="Search by name, email, company…"
+    [showStatus]="true"
+    [statusOptions]="statusSelectOptions"
+    [showCategory]="true"
+    categoryLabel="Category"
+    [categorySelectOptions]="categorySelectOptions"
+    (filtersChange)="onFiltersChange($event)">
+  </app-filter-bar>
+
+  <!-- Table Card -->
+  <mat-card class="table-card">
+    <mat-progress-bar *ngIf="loading()" mode="indeterminate" class="loading-bar"></mat-progress-bar>
+
+    <mat-card-content>
+      <div class="table-wrapper">
+        <table mat-table [dataSource]="quotes()" matSort (matSortChange)="onSortChange($event)"
+               class="full-width">
+
+          <!-- # -->
+          <ng-container matColumnDef="index">
+            <th mat-header-cell *matHeaderCellDef>#</th>
+            <td mat-cell *matCellDef="let q; let i = index">{{ rowIndex(i) }}</td>
+          </ng-container>
+
+          <!-- Full Name -->
+          <ng-container matColumnDef="fullName">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header="fullName">Full Name</th>
+            <td mat-cell *matCellDef="let q" class="name-cell">{{ q.fullName }}</td>
+          </ng-container>
+
+          <!-- Company -->
+          <ng-container matColumnDef="company">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header="companyName">Company</th>
+            <td mat-cell *matCellDef="let q" class="company-cell">{{ q.companyName || '—' }}</td>
+          </ng-container>
+
+          <!-- Email -->
+          <ng-container matColumnDef="email">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header="email">Email</th>
+            <td mat-cell *matCellDef="let q" class="email-cell">{{ q.email }}</td>
+          </ng-container>
+
+          <!-- Phone -->
+          <ng-container matColumnDef="phone">
+            <th mat-header-cell *matHeaderCellDef>Phone</th>
+            <td mat-cell *matCellDef="let q" class="phone-cell">{{ q.phone || '—' }}</td>
+          </ng-container>
+
+          <!-- Country -->
+          <ng-container matColumnDef="country">
+            <th mat-header-cell *matHeaderCellDef>Country</th>
+            <td mat-cell *matCellDef="let q" class="country-cell">{{ q.country || '—' }}</td>
+          </ng-container>
+
+          <!-- Industry -->
+          <ng-container matColumnDef="industry">
+            <th mat-header-cell *matHeaderCellDef>Industry</th>
+            <td mat-cell *matCellDef="let q" class="industry-cell">{{ q.industry || '—' }}</td>
+          </ng-container>
+
+          <!-- Category -->
+          <ng-container matColumnDef="category">
+            <th mat-header-cell *matHeaderCellDef>Category</th>
+            <td mat-cell *matCellDef="let q">
+              <span class="badge badge-category">
+                {{ getCategoryLabel(q.selectedCategory) }}
+              </span>
+            </td>
+          </ng-container>
+
+          <!-- Status -->
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef>Status</th>
+            <td mat-cell *matCellDef="let q">
+              <span class="badge" [ngClass]="getStatusClass(q.status)">
+                {{ q.status }}
+              </span>
+            </td>
+          </ng-container>
+
+          <!-- Created Date -->
+          <ng-container matColumnDef="createdAt">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header="createdAt">Created</th>
+            <td mat-cell *matCellDef="let q" class="date-cell">
+              {{ q.createdAt | date:'mediumDate' }}
+            </td>
+          </ng-container>
+
+          <!-- Actions -->
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef class="actions-header"></th>
+            <td mat-cell *matCellDef="let q" class="actions-cell">
+              <button mat-icon-button color="primary"
+                      (click)="openViewDialog(q)" matTooltip="View details">
+                <mat-icon>visibility</mat-icon>
+              </button>
+
+              <button mat-icon-button [matMenuTriggerFor]="moreMenu" matTooltip="More actions">
+                <mat-icon>more_vert</mat-icon>
+              </button>
+              <mat-menu #moreMenu="matMenu">
+                <button mat-menu-item (click)="openViewDialog(q)">
+                  <mat-icon>visibility</mat-icon><span>View Details</span>
+                </button>
+
+                <button mat-menu-item [matMenuTriggerFor]="statusMenu">
+                  <mat-icon>swap_horiz</mat-icon><span>Change Status</span>
+                </button>
+                <mat-menu #statusMenu="matMenu">
+                  <button mat-menu-item *ngFor="let opt of allStatusOptions"
+                          (click)="onStatusChange(q, opt.value)"
+                          [class.status-active]="q.status === opt.value">
+                    <mat-icon *ngIf="q.status === opt.value">check</mat-icon>
+                    <mat-icon *ngIf="q.status !== opt.value">circle</mat-icon>
+                    <span>{{ opt.label }}</span>
+                  </button>
+                </mat-menu>
+
+                <button mat-menu-item (click)="onDelete(q)">
+                  <mat-icon color="warn">delete</mat-icon>
+                  <span class="delete-label">Delete</span>
+                </button>
+              </mat-menu>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="table-row"></tr>
+
+          <tr class="mat-row no-data-row" *matNoDataRow>
+            <td class="mat-cell" [attr.colspan]="displayedColumns.length">
+              No quote requests found.
+            </td>
+          </tr>
+
+        </table>
+      </div>
+    </mat-card-content>
+
+    <mat-paginator
+      [length]="totalElements()"
+      [pageSize]="pageSize()"
+      [pageIndex]="pageIndex()"
+      [pageSizeOptions]="[5, 10, 25, 50]"
+      showFirstLastButtons
+      (page)="onPageChange($event)">
+    </mat-paginator>
+  </mat-card>
+
+</div>

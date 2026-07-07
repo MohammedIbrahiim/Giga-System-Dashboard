@@ -1,0 +1,79 @@
+<h2 mat-dialog-title>{{ isAdd ? 'Add User' : 'Edit User' }}</h2>
+
+<mat-dialog-content *ngIf="form">
+  <form [formGroup]="form" novalidate class="dialog-form">
+
+    <!-- Full Name -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Full Name</mat-label>
+      <mat-icon matPrefix>person_outline</mat-icon>
+      <input matInput formControlName="name" autocomplete="name" />
+      <mat-error *ngIf="form.get('name')?.hasError('required')">Name is required</mat-error>
+    </mat-form-field>
+
+    <!-- Email -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Email Address</mat-label>
+      <mat-icon matPrefix>email</mat-icon>
+      <input matInput formControlName="email" type="email" autocomplete="email" />
+      <mat-error *ngIf="form.get('email')?.hasError('required')">Email is required</mat-error>
+      <mat-error *ngIf="form.get('email')?.hasError('email')">Enter a valid email address</mat-error>
+    </mat-form-field>
+
+    <!-- Password — add mode only -->
+    <mat-form-field *ngIf="isAdd" appearance="outline" class="full-width">
+      <mat-label>Password</mat-label>
+      <mat-icon matPrefix>lock</mat-icon>
+      <input matInput formControlName="password"
+             [type]="showPassword() ? 'text' : 'password'"
+             autocomplete="new-password" />
+      <button mat-icon-button matSuffix type="button"
+              (click)="showPassword.set(!showPassword())"
+              [attr.aria-label]="showPassword() ? 'Hide password' : 'Show password'">
+        <mat-icon>{{ showPassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
+      </button>
+      <mat-error *ngIf="form.get('password')?.hasError('required')">Password is required</mat-error>
+      <mat-error *ngIf="form.get('password')?.hasError('minlength')">Minimum 6 characters</mat-error>
+    </mat-form-field>
+
+    <!-- Profile Photo — edit mode only -->
+    <div *ngIf="isEdit" class="image-upload-field">
+      <span class="image-field-label">Profile Photo (optional)</span>
+      <div *ngIf="imagePreview()" class="image-preview-wrap">
+        <img [src]="imagePreview()!" class="image-preview" alt="Preview" />
+        <button mat-icon-button type="button" class="remove-btn" (click)="removeImage()">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+      <input #imgInput type="file" accept="image/*" style="display:none"
+             (change)="onImageSelect($event)" />
+      <button *ngIf="!imagePreview()" mat-stroked-button type="button"
+              class="select-image-btn" (click)="imgInput.click()">
+        <mat-icon>upload</mat-icon>
+        Upload Photo
+      </button>
+    </div>
+
+    <!-- Admin checkbox -->
+    <div class="checkbox-row">
+      <mat-checkbox formControlName="admin" color="primary">
+        Make this user an Admin
+      </mat-checkbox>
+      <p class="checkbox-hint" *ngIf="!isSuperAdmin">
+        Admins can manage News, Products, and Projects.
+      </p>
+      <p class="checkbox-hint super-admin-note" *ngIf="isSuperAdmin">
+        Super Admin role cannot be changed.
+      </p>
+    </div>
+
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button type="button" (click)="onCancel()">Cancel</button>
+  <button mat-raised-button color="primary" type="button"
+          (click)="onSubmit()" [disabled]="form.invalid || loading()">
+    {{ loading() ? 'Saving…' : 'Save' }}
+  </button>
+</mat-dialog-actions>

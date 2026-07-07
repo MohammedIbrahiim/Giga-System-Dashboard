@@ -1,0 +1,270 @@
+<div class="page-container">
+
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Products</h1>
+      <p class="page-subtitle">{{ totalElements() }} products in catalog</p>
+    </div>
+    <button mat-raised-button color="primary" (click)="openAddDialog()">
+      <mat-icon>add</mat-icon>
+      Add Product
+    </button>
+  </div>
+
+  <!-- ── Filters ────────────────────────────────────────────────────────── -->
+  <div class="filter-area">
+
+    <!-- Row 1: Search + Brand + Stock Status -->
+    <div class="filter-row">
+      <mat-form-field appearance="outline" class="search-field">
+        <mat-label>Search products…</mat-label>
+        <input matInput [formControl]="searchCtrl" />
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="brand-field">
+        <mat-label>Brand</mat-label>
+        <mat-select [formControl]="brandCtrl">
+          <mat-option value="">All Brands</mat-option>
+          <mat-option *ngFor="let b of brandOptions()" [value]="b">{{ b }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="stock-field">
+        <mat-label>Stock Status</mat-label>
+        <mat-select [formControl]="stockCtrl">
+          <mat-option value="">All Statuses</mat-option>
+          <mat-option *ngFor="let s of stockStatusOptions" [value]="s.value">{{ s.label }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <!-- Row 2: Dynamic Filter Type + Filter Values (only when metadata loaded) -->
+    <div class="filter-row" *ngIf="tableFilterTypeOpts().length > 0">
+      <mat-form-field appearance="outline" class="filter-type-field">
+        <mat-label>Filter Type</mat-label>
+        <mat-select [value]="tableFilterType()"
+                    (selectionChange)="onTableFilterTypeChange($event.value)">
+          <mat-option value="">— Select a filter type —</mat-option>
+          <mat-option *ngFor="let t of tableFilterTypeOpts()" [value]="t.key">
+            {{ t.title }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="filter-values-field"
+                      *ngIf="tableFilterType()">
+        <mat-label>{{ tableCurrentFilterTitle() }}</mat-label>
+        <mat-select multiple
+                    [value]="tableCurrentValues()"
+                    (selectionChange)="onTableFilterValuesChange($event.value)">
+          <mat-option *ngFor="let opt of tableCurrentFilterOpts()" [value]="opt.value">
+            {{ opt.label }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <!-- Chips row: applied metadata filter selections -->
+    <div class="filter-chips-row" *ngIf="tableFilterChips().length > 0">
+      <mat-chip-set aria-label="Applied filters">
+        <mat-chip *ngFor="let chip of tableFilterChips()"
+                  (removed)="removeTableFilterChip(chip)">
+          <span class="chip-group-label">{{ chip.groupTitle }}:</span>&nbsp;{{ chip.label }}
+          <button matChipRemove type="button" [attr.aria-label]="'Remove ' + chip.label">
+            <mat-icon>cancel</mat-icon>
+          </button>
+        </mat-chip>
+      </mat-chip-set>
+      <button mat-button type="button" color="warn" class="clear-all-btn"
+              (click)="clearTableFilters()">
+        <mat-icon>clear_all</mat-icon> Clear Filters
+      </button>
+    </div>
+
+  </div>
+
+  <!-- ── Table Card ─────────────────────────────────────────────────────── -->
+  <mat-card class="table-card">
+    <mat-progress-bar *ngIf="loading()" mode="indeterminate" class="loading-bar"></mat-progress-bar>
+
+    <mat-card-content>
+      <div class="table-wrapper">
+        <table mat-table [dataSource]="products()" matSort (matSortChange)="onSortChange($event)"
+               class="full-width">
+
+          <!-- # -->
+          <ng-container matColumnDef="index">
+            <th mat-header-cell *matHeaderCellDef>#</th>
+            <td mat-cell *matCellDef="let p; let i = index">{{ rowIndex(i) }}</td>
+          </ng-container>
+
+          <!-- Main Image -->
+          <ng-container matColumnDef="mainImage">
+            <th mat-header-cell *matHeaderCellDef>Image</th>
+            <td mat-cell *matCellDef="let p">
+              <div class="main-image-cell">
+                <img *ngIf="p.mainImageBase64"
+                     [src]="formatImage(p.mainImageBase64)"
+                     class="main-thumb" alt="" />
+                <div *ngIf="!p.mainImageBase64" class="main-placeholder">
+                  <mat-icon>inventory_2</mat-icon>
+                </div>
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- Product Name / SKU -->
+          <ng-container matColumnDef="productName">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header="productName">Product</th>
+            <td mat-cell *matCellDef="let p">
+              <div class="name-cell">
+                <span class="name-text">{{ p.productName }}</span>
+                <span class="sku-text">{{ p.sku }}</span>
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- Brand -->
+          <ng-container matColumnDef="brand">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header="brand">Brand</th>
+            <td mat-cell *matCellDef="let p" class="brand-cell">
+              <div class="brand-cell-inner" *ngIf="p.brandLogoBase64; else brandNameOnly">
+                <img [src]="formatImage(p.brandLogoBase64)" class="brand-logo" alt="" />
+                <span>{{ p.brandName || '—' }}</span>
+              </div>
+              <ng-template #brandNameOnly>{{ p.brandName || '—' }}</ng-template>
+            </td>
+          </ng-container>
+
+          <!-- Category -->
+          <ng-container matColumnDef="category">
+            <th mat-header-cell *matHeaderCellDef>Category</th>
+            <td mat-cell *matCellDef="let p">
+              <span class="badge" [ngClass]="getCategoryClass(p.category)">
+                {{ p.category?.value || '—' }}
+              </span>
+            </td>
+          </ng-container>
+
+          <!-- Subcategory -->
+          <ng-container matColumnDef="subcategory">
+            <th mat-header-cell *matHeaderCellDef>Subcategory</th>
+            <td mat-cell *matCellDef="let p" class="sub-cell">
+              {{ p.subCategory?.value || '—' }}
+            </td>
+          </ng-container>
+
+          <!-- Stock Status -->
+          <ng-container matColumnDef="stockStatus">
+            <th mat-header-cell *matHeaderCellDef>Stock</th>
+            <td mat-cell *matCellDef="let p">
+              <span class="badge" [ngClass]="getStockClass(p.stockStatus)">
+                {{ getStockLabel(p.stockStatus) }}
+              </span>
+            </td>
+          </ng-container>
+
+          <!-- Rank -->
+          <ng-container matColumnDef="rank">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header="rank">Rank</th>
+            <td mat-cell *matCellDef="let p" class="rank-cell">
+              {{ p.rank != null ? p.rank : '—' }}
+            </td>
+          </ng-container>
+
+          <!-- Gallery -->
+          <ng-container matColumnDef="gallery">
+            <th mat-header-cell *matHeaderCellDef>Gallery</th>
+            <td mat-cell *matCellDef="let p">
+              <div class="gallery-thumbs" *ngIf="p.galleryImages?.length; else noGallery">
+                <img *ngFor="let img of p.galleryImages.slice(0, 4)"
+                     [src]="formatImage(img.imageBase64)"
+                     class="gallery-thumb" alt="" />
+                <span class="gallery-more" *ngIf="p.galleryImages.length > 4">
+                  +{{ p.galleryImages.length - 4 }}
+                </span>
+              </div>
+              <ng-template #noGallery><span class="no-data">—</span></ng-template>
+            </td>
+          </ng-container>
+
+          <!-- Datasheet -->
+          <ng-container matColumnDef="datasheet">
+            <th mat-header-cell *matHeaderCellDef>Datasheet</th>
+            <td mat-cell *matCellDef="let p">
+              <div class="doc-cell" *ngIf="p.datasheetFileName; else noDoc">
+                <mat-icon class="pdf-icon">picture_as_pdf</mat-icon>
+                <span class="doc-label" [matTooltip]="p.datasheetFileName">DS</span>
+              </div>
+              <ng-template #noDoc><span class="no-data">—</span></ng-template>
+            </td>
+          </ng-container>
+
+          <!-- Manual -->
+          <ng-container matColumnDef="manual">
+            <th mat-header-cell *matHeaderCellDef>Manual</th>
+            <td mat-cell *matCellDef="let p">
+              <div class="doc-cell" *ngIf="p.manualFileName; else noManual">
+                <mat-icon class="pdf-icon">picture_as_pdf</mat-icon>
+                <span class="doc-label" [matTooltip]="p.manualFileName">MN</span>
+              </div>
+              <ng-template #noManual><span class="no-data">—</span></ng-template>
+            </td>
+          </ng-container>
+
+          <!-- Actions -->
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef class="actions-header"></th>
+            <td mat-cell *matCellDef="let p" class="actions-cell">
+              <button mat-icon-button color="primary"
+                      (click)="openEditDialog(p)" matTooltip="Edit">
+                <mat-icon>edit</mat-icon>
+              </button>
+
+              <button mat-icon-button [matMenuTriggerFor]="moreMenu"
+                      matTooltip="More actions">
+                <mat-icon>more_vert</mat-icon>
+              </button>
+              <mat-menu #moreMenu="matMenu">
+                <button mat-menu-item (click)="openEditDialog(p)">
+                  <mat-icon>edit</mat-icon><span>Edit</span>
+                </button>
+                <button mat-menu-item (click)="onDelete(p)">
+                  <mat-icon color="warn">delete</mat-icon>
+                  <span class="delete-label">Delete</span>
+                </button>
+              </mat-menu>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="table-row"></tr>
+
+          <tr class="mat-row no-data-row" *matNoDataRow>
+            <td class="mat-cell" [attr.colspan]="displayedColumns.length">
+              <ng-container *ngIf="hasActiveFilters; else noDataDefault">
+                No products match the selected filters.
+                <button mat-button type="button" color="primary" (click)="clearTableFilters()">
+                  Clear Filters
+                </button>
+              </ng-container>
+              <ng-template #noDataDefault>No products found.</ng-template>
+            </td>
+          </tr>
+
+        </table>
+      </div>
+    </mat-card-content>
+
+    <mat-paginator
+      [length]="totalElements()"
+      [pageSize]="pageSize()"
+      [pageIndex]="pageIndex()"
+      [pageSizeOptions]="[5, 10, 25, 50]"
+      showFirstLastButtons
+      (page)="onPageChange($event)">
+    </mat-paginator>
+  </mat-card>
+
+</div>

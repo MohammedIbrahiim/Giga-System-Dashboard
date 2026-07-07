@@ -1,0 +1,109 @@
+/* Dashboard Styles */
+.dashboard {
+  max-width: 1400px;
+}
+
+/* Stat Cards */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.stat-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px;
+}
+
+.stat-icon-wrap {
+  width: 52px;
+  height: 52px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  mat-icon {
+    color: white;
+    font-size: 26px;
+    width: 26px;
+    height: 26px;
+  }
+
+  &.blue   { background: #3f51b5; }
+  &.green  { background: #4caf50; }
+  &.purple { background: #9c27b0; }
+  &.orange { background: #ff9800; }
+}
+
+.stat-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.stat-value {
+  font-size: 28px;
+  font-weight: 700;
+  color: #212121;
+  line-height: 1;
+  text-align: center;
+}
+
+.stat-label {
+  font-size: 13px;
+  color: #757575;
+  margin-top: 4px;
+}
+
+/* Charts */
+.charts-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr; /* Full-width chart on the left, half-width on the right */
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.chart-card {
+  mat-card-content {
+    padding-top: 8px;
+  }
+}
+
+.chart-container {
+  height: 240px;
+  position: relative;
+}
+
+/* Ensure the full-width chart spans the entire row */
+.chart-card.full-width {
+  grid-column: span 2; /* Spans across two columns */
+}
+
+.chart-card.half-width {
+  grid-column: span 1; /* Takes up one column */
+}
+
+/* Product Slider section */
+.slider-section {
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+
+  mat-card-content {
+    padding-top: 8px;
+    overflow: hidden;
+  }
+}
+
+/* Responsive Styles */
+@media (max-width: 1024px) {
+  .stats-row { grid-template-columns: repeat(2, 1fr); }
+  .charts-row { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 600px) {
+  .stats-row { grid-template-columns: 1fr; }
+}

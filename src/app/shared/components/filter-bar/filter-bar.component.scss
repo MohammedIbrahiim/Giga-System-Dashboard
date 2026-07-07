@@ -1,0 +1,54 @@
+.filter-bar {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.07);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.filter-field {
+  flex: 1 1 180px;
+  max-width: 260px;
+  width: 100%;
+
+  &--search { flex: 2 1 220px; max-width: 340px; }
+  &--date   { flex: 1 1 220px; max-width: 280px; }
+  &--sm     { flex: 1 1 130px; max-width: 170px; }
+}
+
+.range-group {
+  display: flex;
+  gap: 8px;
+  flex: 1 1 280px;
+  flex-wrap: wrap;
+}
+
+.clear-btn {
+  align-self: center;
+  white-space: nowrap;
+  color: #757575;
+  border-color: #e0e0e0;
+  height: 40px;
+  margin-top: 4px;
+
+  mat-icon { font-size: 18px; width: 18px; height: 18px; margin-right: 4px; vertical-align: middle; }
+}
+
+// Mobile: stack all filters
+@media (max-width: 768px) {
+  .filter-bar { padding: 12px 14px; gap: 8px; }
+  .filter-field,
+  .filter-field--search,
+  .filter-field--date,
+  .filter-field--sm {
+    flex: none;
+    width: 100%;
+    max-width: 100%;
+  }
+  .range-group { flex-direction: column; width: 100%; }
+  .clear-btn   { width: 100%; justify-content: center; }
+}

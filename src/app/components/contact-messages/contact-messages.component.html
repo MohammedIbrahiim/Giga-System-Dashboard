@@ -1,0 +1,186 @@
+<div class="page-container">
+
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Contact Messages</h1>
+      <p class="page-subtitle">{{ totalElements() }} message{{ totalElements() !== 1 ? 's' : '' }}</p>
+    </div>
+  </div>
+
+  <!-- Stats Cards -->
+  <div class="stats-grid" *ngIf="stats()">
+    <mat-card class="stat-card">
+      <div class="stat-icon-wrap stat-icon-wrap--total">
+        <mat-icon>mail</mat-icon>
+      </div>
+      <div class="stat-info">
+        <div class="stat-value">{{ stats()!.total }}</div>
+        <div class="stat-label">Total Messages</div>
+      </div>
+    </mat-card>
+
+    <mat-card class="stat-card">
+      <div class="stat-icon-wrap stat-icon-wrap--new">
+        <mat-icon>mark_email_unread</mat-icon>
+      </div>
+      <div class="stat-info">
+        <div class="stat-value">{{ stats()!.newCount }}</div>
+        <div class="stat-label">New</div>
+      </div>
+    </mat-card>
+
+    <mat-card class="stat-card">
+      <div class="stat-icon-wrap stat-icon-wrap--read">
+        <mat-icon>drafts</mat-icon>
+      </div>
+      <div class="stat-info">
+        <div class="stat-value">{{ stats()!.read }}</div>
+        <div class="stat-label">Read</div>
+      </div>
+    </mat-card>
+
+    <mat-card class="stat-card">
+      <div class="stat-icon-wrap stat-icon-wrap--replied">
+        <mat-icon>reply</mat-icon>
+      </div>
+      <div class="stat-info">
+        <div class="stat-value">{{ stats()!.replied }}</div>
+        <div class="stat-label">Replied</div>
+      </div>
+    </mat-card>
+
+    <mat-card class="stat-card">
+      <div class="stat-icon-wrap stat-icon-wrap--archived">
+        <mat-icon>archive</mat-icon>
+      </div>
+      <div class="stat-info">
+        <div class="stat-value">{{ stats()!.archived }}</div>
+        <div class="stat-label">Archived</div>
+      </div>
+    </mat-card>
+  </div>
+
+  <!-- Filters -->
+  <app-filter-bar
+    searchPlaceholder="Search by name or email…"
+    [showStatus]="true"
+    [statusOptions]="statusSelectOptions"
+    (filtersChange)="onFiltersChange($event)">
+  </app-filter-bar>
+
+  <!-- Table Card -->
+  <mat-card class="table-card">
+    <mat-progress-bar *ngIf="loading()" mode="indeterminate" class="loading-bar"></mat-progress-bar>
+
+    <mat-card-content>
+      <div class="table-wrapper">
+        <table mat-table [dataSource]="messages()" matSort (matSortChange)="onSortChange($event)"
+               class="full-width">
+
+          <!-- # -->
+          <ng-container matColumnDef="index">
+            <th mat-header-cell *matHeaderCellDef>#</th>
+            <td mat-cell *matCellDef="let m; let i = index">{{ rowIndex(i) }}</td>
+          </ng-container>
+
+          <!-- Full Name -->
+          <ng-container matColumnDef="fullName">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header="firstName">Full Name</th>
+            <td mat-cell *matCellDef="let m">
+              <span class="name-cell" [class.name-cell--new]="m.status === 'NEW'">
+                {{ fullName(m) }}
+              </span>
+            </td>
+          </ng-container>
+
+          <!-- Email -->
+          <ng-container matColumnDef="email">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header="email">Email</th>
+            <td mat-cell *matCellDef="let m" class="email-cell">{{ m.email }}</td>
+          </ng-container>
+
+          <!-- Phone -->
+          <ng-container matColumnDef="phone">
+            <th mat-header-cell *matHeaderCellDef>Phone</th>
+            <td mat-cell *matCellDef="let m" class="phone-cell">{{ m.phone || '—' }}</td>
+          </ng-container>
+
+          <!-- Status -->
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef>Status</th>
+            <td mat-cell *matCellDef="let m">
+              <span class="badge" [ngClass]="getStatusClass(m.status)">
+                {{ m.status }}
+              </span>
+            </td>
+          </ng-container>
+
+          <!-- Created Date -->
+          <ng-container matColumnDef="createdAt">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header="createdAt">Received</th>
+            <td mat-cell *matCellDef="let m" class="date-cell">
+              {{ m.createdAt | date:'mediumDate' }}
+            </td>
+          </ng-container>
+
+          <!-- Actions -->
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef class="actions-header"></th>
+            <td mat-cell *matCellDef="let m" class="actions-cell">
+              <button mat-icon-button color="primary"
+                      (click)="openViewDialog(m)" matTooltip="View message">
+                <mat-icon>visibility</mat-icon>
+              </button>
+
+              <button mat-icon-button [matMenuTriggerFor]="moreMenu" matTooltip="More actions">
+                <mat-icon>more_vert</mat-icon>
+              </button>
+              <mat-menu #moreMenu="matMenu">
+                <button mat-menu-item (click)="openViewDialog(m)">
+                  <mat-icon>visibility</mat-icon><span>View Message</span>
+                </button>
+
+                <button mat-menu-item [matMenuTriggerFor]="statusMenu">
+                  <mat-icon>swap_horiz</mat-icon><span>Change Status</span>
+                </button>
+                <mat-menu #statusMenu="matMenu">
+                  <button mat-menu-item *ngFor="let opt of allStatusOptions"
+                          (click)="onStatusChange(m, opt.value)"
+                          [class.status-active]="m.status === opt.value">
+                    <mat-icon>{{ m.status === opt.value ? 'check' : 'radio_button_unchecked' }}</mat-icon>
+                    <span>{{ opt.label }}</span>
+                  </button>
+                </mat-menu>
+
+                <button mat-menu-item (click)="onDelete(m)">
+                  <mat-icon color="warn">delete</mat-icon>
+                  <span class="delete-label">Delete</span>
+                </button>
+              </mat-menu>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="table-row"></tr>
+
+          <tr class="mat-row no-data-row" *matNoDataRow>
+            <td class="mat-cell" [attr.colspan]="displayedColumns.length">
+              No contact messages found.
+            </td>
+          </tr>
+
+        </table>
+      </div>
+    </mat-card-content>
+
+    <mat-paginator
+      [length]="totalElements()"
+      [pageSize]="pageSize()"
+      [pageIndex]="pageIndex()"
+      [pageSizeOptions]="[5, 10, 25, 50]"
+      showFirstLastButtons
+      (page)="onPageChange($event)">
+    </mat-paginator>
+  </mat-card>
+
+</div>

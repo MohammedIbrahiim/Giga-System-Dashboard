@@ -1,0 +1,48 @@
+<div class="login-page">
+
+  <div class="login-card">
+
+    <div class="login-brand">
+      <div class="login-logo"><mat-icon>hub</mat-icon></div>
+      <h1 class="login-title">Giga System</h1>
+      <p class="login-subtitle">Sign in to your account</p>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="onLogin()" class="login-form" novalidate>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Email address</mat-label>
+        <mat-icon matPrefix class="field-icon">email</mat-icon>
+        <input matInput formControlName="email" type="email"
+               placeholder="you@example.com"
+               aria-label="Email address"
+               autocomplete="email" />
+        <mat-error *ngIf="form.get('email')?.hasError('required')">Email is required</mat-error>
+        <mat-error *ngIf="form.get('email')?.hasError('email')">Enter a valid email address</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Password</mat-label>
+        <mat-icon matPrefix class="field-icon">lock</mat-icon>
+        <input matInput formControlName="password"
+               [type]="showPassword ? 'text' : 'password'"
+               aria-label="Password"
+               autocomplete="current-password" />
+        <button mat-icon-button matSuffix type="button"
+                [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'"
+                (click)="showPassword = !showPassword">
+          <mat-icon>{{ showPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+        </button>
+        <mat-error *ngIf="form.get('password')?.hasError('required')">Password is required</mat-error>
+      </mat-form-field>
+
+      <button mat-raised-button type="submit" class="login-btn"
+              [disabled]="form.invalid || loading" aria-label="Sign in">
+        {{ loading ? 'Signing in…' : 'Sign In' }}
+      </button>
+
+    </form>
+
+  </div>
+
+</div>
