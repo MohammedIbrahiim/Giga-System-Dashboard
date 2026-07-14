@@ -12,6 +12,7 @@
   </div>
 
   <!-- ── Filters ────────────────────────────────────────────────────────── -->
+  <p class="list-section-label">Filter Products</p>
   <div class="filter-area">
 
     <!-- Row 1: Search + Brand + Stock Status -->
@@ -39,7 +40,7 @@
       </mat-form-field>
     </div>
 
-    <!-- Row 2: Dynamic Filter Type + Filter Values (only when metadata loaded) -->
+    <!-- Row 2: Dynamic Filter Type + Filter Values + Subcategory + Clear -->
     <div class="filter-row" *ngIf="tableFilterTypeOpts().length > 0">
       <mat-form-field appearance="outline" class="filter-type-field">
         <mat-label>Filter Type</mat-label>
@@ -63,6 +64,24 @@
           </mat-option>
         </mat-select>
       </mat-form-field>
+
+      <mat-form-field appearance="outline" class="filter-values-field"
+                      *ngIf="tableAvailableSubOpts().length > 0">
+        <mat-label>Subcategory</mat-label>
+        <mat-select [value]="tableSubCategoryId()"
+                    (selectionChange)="onTableSubCategoryChange($event.value)">
+          <mat-option [value]="null">All Subcategories</mat-option>
+          <mat-option *ngFor="let opt of tableAvailableSubOpts()" [value]="opt.id">
+            {{ opt.label }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <button mat-stroked-button type="button" class="clear-btn"
+              (click)="clearTableFilters()" title="Clear all filters">
+        <mat-icon>filter_alt_off</mat-icon>
+        Clear
+      </button>
     </div>
 
     <!-- Chips row: applied metadata filter selections -->
@@ -76,15 +95,12 @@
           </button>
         </mat-chip>
       </mat-chip-set>
-      <button mat-button type="button" color="warn" class="clear-all-btn"
-              (click)="clearTableFilters()">
-        <mat-icon>clear_all</mat-icon> Clear Filters
-      </button>
     </div>
 
   </div>
 
   <!-- ── Table Card ─────────────────────────────────────────────────────── -->
+  <p class="list-section-label">Product Table</p>
   <mat-card class="table-card">
     <mat-progress-bar *ngIf="loading()" mode="indeterminate" class="loading-bar"></mat-progress-bar>
 
@@ -217,11 +233,6 @@
           <ng-container matColumnDef="actions">
             <th mat-header-cell *matHeaderCellDef class="actions-header"></th>
             <td mat-cell *matCellDef="let p" class="actions-cell">
-              <button mat-icon-button color="primary"
-                      (click)="openEditDialog(p)" matTooltip="Edit">
-                <mat-icon>edit</mat-icon>
-              </button>
-
               <button mat-icon-button [matMenuTriggerFor]="moreMenu"
                       matTooltip="More actions">
                 <mat-icon>more_vert</mat-icon>

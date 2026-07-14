@@ -25,7 +25,7 @@
 .section-label {
   font-size: 12px;
   font-weight: 600;
-  color: #0B5ED7;
+  color: #2E9E44;
   text-transform: uppercase;
   letter-spacing: 0.6px;
   margin: 8px 0 4px;
@@ -170,4 +170,9 @@
   gap: 32px;
   align-items: center;
   padding: 4px 0 8px;
+}
+
+@media (max-width: 600px) {
+  .dialog-form { min-width: 0; }
+  .two-col, .three-col { grid-template-columns: 1fr; }
 }

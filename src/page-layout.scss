@@ -1,3 +1,8 @@
+// ─── Shared design tokens ────────────────────────────────────────────────────
+// Single source of truth for the "card" corner radius used by table cards,
+// stat cards, and the filter bar — keeps every list page visually consistent.
+$card-radius: 12px;
+
 .page-container {
   max-width: 1400px;
 }
@@ -11,7 +16,7 @@
   .page-title {
     font-size: 24px;
     font-weight: 500;
-    color: #0B5ED7;
+    color: #2E9E44;
     margin: 0 0 4px;
   }
 
@@ -24,4 +29,50 @@
   button mat-icon {
     margin-right: 4px;
   }
+}
+
+// ─── Section labels — sit above the filter bar and above the table ─────────
+
+.list-section-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #2E9E44;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  margin: 0 0 8px;
+}
+
+// ─── Shared table card shell ─────────────────────────────────────────────────
+
+.table-card {
+  position: relative;
+  margin-bottom: 24px;
+  border-radius: $card-radius;
+  overflow: hidden;
+}
+
+.loading-bar {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  border-radius: $card-radius $card-radius 0 0;
+  z-index: 1;
+}
+
+.table-wrapper { overflow-x: auto; }
+.full-width    { width: 100%; }
+
+.no-data-row td {
+  padding: 20px;
+  text-align: center;
+  color: #9e9e9e;
+}
+
+.table-row:hover { background: rgba(0, 0, 0, 0.02); }
+
+// ─── Shared stat card shell (quote-requests / contact-messages) ────────────
+
+.stat-card {
+  border-radius: $card-radius;
+  justify-content: center;
+  min-width: 0;
 }

@@ -2,64 +2,66 @@
 <router-outlet *ngIf="isLoginPage(); else shell"></router-outlet>
 
 <ng-template #shell>
-<mat-sidenav-container class="sidenav-container">
+<mat-sidenav-container class="sidenav-container"
+  [class.side-mode]="sidebarMode === 'side'"
+  [class.collapsed]="sidebarMode === 'side' && !appState.sidebarOpen()">
 
   <mat-sidenav
     #sidenav
     [mode]="sidebarMode"
-    [opened]="appState.sidebarOpen()"
+    [opened]="sidebarMode === 'over' ? appState.sidebarOpen() : true"
     class="sidenav"
+    [class.collapsed]="sidebarMode === 'side' && !appState.sidebarOpen()"
     fixedInViewport>
 
     <div class="brand">
-      <div class="brand-logo"><mat-icon>hub</mat-icon></div>
-      <span class="brand-name">Giga System</span>
+      <img src="assets/logo.svg" alt="Giga System" class="brand-logo-img" />
     </div>
 
     <mat-nav-list class="nav-list">
-      <a mat-list-item routerLink="/dashboard" routerLinkActive="active-link">
+      <a mat-list-item routerLink="/dashboard" routerLinkActive="active-link" title="Dashboard">
         <mat-icon matListItemIcon>grid_view</mat-icon>
-        <span matListItemTitle>Dashboard</span>
+        <span matListItemTitle class="nav-label">Dashboard</span>
       </a>
 
       <div class="nav-section-label">Content</div>
 
-      <a mat-list-item routerLink="/news" routerLinkActive="active-link">
-        <mat-icon matListItemIcon>newspaper</mat-icon>
-        <span matListItemTitle>News</span>
-      </a>
-
-      <a mat-list-item routerLink="/products" routerLinkActive="active-link">
-        <mat-icon matListItemIcon>inventory_2</mat-icon>
-        <span matListItemTitle>Products</span>
-      </a>
-
-      <a mat-list-item routerLink="/projects" routerLinkActive="active-link">
-        <mat-icon matListItemIcon>work</mat-icon>
-        <span matListItemTitle>Projects</span>
-      </a>
-
-      <a mat-list-item routerLink="/partners" routerLinkActive="active-link">
+      <a mat-list-item routerLink="/partners" routerLinkActive="active-link" title="Partners">
         <mat-icon matListItemIcon>handshake</mat-icon>
-        <span matListItemTitle>Partners</span>
+        <span matListItemTitle class="nav-label">Partners</span>
       </a>
 
-      <a mat-list-item routerLink="/quote-requests" routerLinkActive="active-link">
+      <a mat-list-item routerLink="/products" routerLinkActive="active-link" title="Products">
+        <mat-icon matListItemIcon>inventory_2</mat-icon>
+        <span matListItemTitle class="nav-label">Products</span>
+      </a>
+
+      <a mat-list-item routerLink="/news" routerLinkActive="active-link" title="News">
+        <mat-icon matListItemIcon>newspaper</mat-icon>
+        <span matListItemTitle class="nav-label">News</span>
+      </a>
+
+      <a mat-list-item routerLink="/projects" routerLinkActive="active-link" title="Projects">
+        <mat-icon matListItemIcon>work</mat-icon>
+        <span matListItemTitle class="nav-label">Projects</span>
+      </a>
+
+      <a mat-list-item routerLink="/quote-requests" routerLinkActive="active-link" title="Quote Requests">
         <mat-icon matListItemIcon>request_quote</mat-icon>
-        <span matListItemTitle>Quote Requests</span>
+        <span matListItemTitle class="nav-label">Quote Requests</span>
       </a>
 
-      <a mat-list-item routerLink="/contact-messages" routerLinkActive="active-link">
+      <a mat-list-item routerLink="/contact-messages" routerLinkActive="active-link" title="Contact Messages">
         <mat-icon matListItemIcon>mail</mat-icon>
-        <span matListItemTitle>Contact Messages</span>
+        <span matListItemTitle class="nav-label">Contact Messages</span>
       </a>
 
       <!-- Management section — SUPER_ADMIN only -->
       <ng-container *ngIf="isSuperAdmin">
         <div class="nav-section-label">Management</div>
-        <a mat-list-item routerLink="/users" routerLinkActive="active-link">
+        <a mat-list-item routerLink="/users" routerLinkActive="active-link" title="Users">
           <mat-icon matListItemIcon>manage_accounts</mat-icon>
-          <span matListItemTitle>Users</span>
+          <span matListItemTitle class="nav-label">Users</span>
         </a>
       </ng-container>
     </mat-nav-list>
@@ -83,7 +85,7 @@
 
     <mat-toolbar color="primary" class="toolbar">
       <button mat-icon-button (click)="appState.toggleSidebar()" aria-label="Toggle sidebar">
-        <mat-icon>menu</mat-icon>
+        <mat-icon>{{ appState.sidebarOpen() ? 'chevron_left' : 'chevron_right' }}</mat-icon>
       </button>
       <span class="toolbar-title">Giga System</span>
       <span class="spacer"></span>
@@ -119,11 +121,6 @@
         <button mat-menu-item *ngIf="isSuperAdmin" (click)="openAddUserDialog()">
           <mat-icon>person_add</mat-icon>
           <span>Add User</span>
-        </button>
-
-        <button mat-menu-item>
-          <mat-icon>help_outline</mat-icon>
-          <span>Help &amp; Support</span>
         </button>
 
         <mat-divider></mat-divider>

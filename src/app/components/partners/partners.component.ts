@@ -58,7 +58,7 @@ export class PartnersComponent implements OnInit {
   readonly pageIndex     = signal(0);
 
   readonly displayedColumns = [
-    'index', 'logo', 'name', 'slug', 'status', 'sortOrder', 'offers', 'actions',
+    'index', 'logo', 'name', 'status', 'offers', 'actions',
   ];
 
   readonly statusSelectOptions: SelectOption[] = [

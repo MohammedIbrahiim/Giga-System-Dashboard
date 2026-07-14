@@ -65,20 +65,20 @@
     <p class="section-label">Descriptions</p>
 
     <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Short Description</mat-label>
+      <mat-label>Short Description (optional)</mat-label>
       <textarea matInput formControlName="shortDescription" rows="2"></textarea>
-      <mat-error *ngIf="form.get('shortDescription')?.hasError('required')">Required</mat-error>
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Detailed Description (optional)</mat-label>
+      <mat-label>Detailed Description</mat-label>
       <textarea matInput formControlName="detailedDescription" rows="4"></textarea>
+      <mat-error *ngIf="form.get('detailedDescription')?.hasError('required')">Required</mat-error>
     </mat-form-field>
 
     <mat-divider class="section-divider"></mat-divider>
 
     <!-- ── Product Filter Metadata ────────────────────────────────────── -->
-    <p class="section-label">Product Filter Metadata</p>
+    <p class="section-label">Technical Filter</p>
 
     <mat-progress-bar *ngIf="metadataLoading()" mode="indeterminate"
                       class="metadata-loading-bar"></mat-progress-bar>
@@ -141,10 +141,11 @@
           </button>
         </mat-chip>
       </mat-chip-set>
-      <button mat-button type="button" color="warn" class="clear-filters-btn" (click)="clearAllFilters()">
-        <mat-icon>clear_all</mat-icon> Clear Filter Metadata
-      </button>
     </div>
+    <button *ngIf="selectedFilterChips().length > 0" mat-button type="button" color="warn"
+            class="clear-filters-btn" (click)="clearAllFilters()">
+      <mat-icon>clear_all</mat-icon> Clear Filter Metadata
+    </button>
 
     <!-- Validation notice for required Main Category -->
     <div class="category-required-notice"
@@ -217,23 +218,6 @@
       </button>
     </div>
 
-    <!-- Manual -->
-    <div class="image-upload-field">
-      <span class="image-field-label">Manual PDF (optional)</span>
-      <div *ngIf="manualFile()" class="document-item">
-        <mat-icon class="pdf-icon">picture_as_pdf</mat-icon>
-        <span class="doc-name">{{ manualFile()!.name }}</span>
-        <button mat-icon-button type="button" (click)="removeManual()">
-          <mat-icon>close</mat-icon>
-        </button>
-      </div>
-      <input #manualInput type="file" accept="application/pdf" style="display:none"
-             (change)="onManualSelect($event)" />
-      <button *ngIf="!manualFile()" mat-stroked-button type="button"
-              class="select-file-btn" (click)="manualInput.click()">
-        <mat-icon>attach_file</mat-icon> Upload Manual
-      </button>
-    </div>
 
     <mat-divider class="section-divider"></mat-divider>
 

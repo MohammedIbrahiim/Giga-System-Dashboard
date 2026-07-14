@@ -60,7 +60,7 @@
 .view-slug {
   font-size: 12px;
   font-family: monospace;
-  color: #0B5ED7;
+  color: #2E9E44;
 }
 
 .view-badge {
@@ -104,7 +104,7 @@
 .section-label {
   font-size: 11.5px;
   font-weight: 600;
-  color: #0B5ED7;
+  color: #2E9E44;
   text-transform: uppercase;
   letter-spacing: 0.6px;
   margin: 8px 0 4px;
@@ -176,4 +176,8 @@
 .meta-value {
   font-size: 13.5px;
   color: #374151;
+}
+
+@media (max-width: 600px) {
+  .view-body { min-width: 0; }
 }

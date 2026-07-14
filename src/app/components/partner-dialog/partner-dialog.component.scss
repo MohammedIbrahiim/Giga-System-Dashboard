@@ -18,7 +18,7 @@
 .section-label {
   font-size: 12px;
   font-weight: 600;
-  color: #0B5ED7;
+  color: #2E9E44;
   text-transform: uppercase;
   letter-spacing: 0.6px;
   margin: 8px 0 4px;
@@ -138,4 +138,9 @@
   padding: 8px 4px;
 
   &::placeholder { color: rgba(0, 0, 0, 0.3); }
+}
+
+@media (max-width: 600px) {
+  .dialog-form { min-width: 0; }
+  .two-col { grid-template-columns: 1fr; }
 }

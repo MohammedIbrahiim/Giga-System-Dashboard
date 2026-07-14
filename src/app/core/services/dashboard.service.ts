@@ -8,7 +8,6 @@ import {
   DashboardSummary,
   RecentNewsItem,
   ProjectStatusChartItem,
-  MonthlyRevenueItem,
   WeeklySalesItem,
 } from '../models/dashboard.model';
 
@@ -32,12 +31,6 @@ export class DashboardService {
   getProjectStatus(): Observable<ProjectStatusChartItem[]> {
     return this.http
       .get<ApiResponse<ProjectStatusChartItem[]>>(`${this.url}/project-status`)
-      .pipe(map(r => r.data));
-  }
-
-  getMonthlyRevenue(): Observable<MonthlyRevenueItem[]> {
-    return this.http
-      .get<ApiResponse<MonthlyRevenueItem[]>>(`${this.url}/monthly-revenue`)
       .pipe(map(r => r.data));
   }
 

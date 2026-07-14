@@ -103,3 +103,8 @@
 .select-image-btn {
   align-self: flex-start;
 }
+
+@media (max-width: 600px) {
+  .dialog-form { min-width: 0; }
+  .two-col { grid-template-columns: 1fr; }
+}

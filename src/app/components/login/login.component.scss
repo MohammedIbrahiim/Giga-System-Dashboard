@@ -158,24 +158,24 @@
   font-size: 15px;
   font-weight: 600;
   letter-spacing: 0.4px;
-  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%) !important;
+  background: #2E9E44 !important;
   color: white !important;
-  box-shadow: 0 4px 16px rgba(99, 102, 241, 0.45) !important;
+  box-shadow: 0 4px 16px rgba(46, 158, 68, 0.45) !important;
   transition: box-shadow 0.2s ease, transform 0.15s ease !important;
 
   &:not([disabled]):hover {
-    box-shadow: 0 6px 22px rgba(99, 102, 241, 0.55) !important;
+    box-shadow: 0 6px 22px rgba(46, 158, 68, 0.55) !important;
     transform: translateY(-1px);
   }
 
   &:not([disabled]):active {
     transform: translateY(0);
-    box-shadow: 0 2px 8px rgba(99, 102, 241, 0.35) !important;
+    box-shadow: 0 2px 8px rgba(46, 158, 68, 0.35) !important;
   }
 
   &[disabled] {
     opacity: 0.55;
-    background: linear-gradient(135deg, #6366f1, #8b5cf6) !important;
+    background: #2E9E44 !important;
     box-shadow: none !important;
   }
 }

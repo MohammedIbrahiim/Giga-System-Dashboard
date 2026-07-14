@@ -7,6 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { forkJoin } from 'rxjs';
 import { DashboardService } from '../../core/services/dashboard.service';
 import { NewsService } from '../../core/services/news.service';
+import { QuoteRequestService } from '../../core/services/quote-request.service';
 import { DashboardSummary } from '../../core/models/dashboard.model';
 import { TableColumn } from '../../models/models';
 import { SharedTableComponent } from '../shared-table/shared-table.component';
@@ -23,6 +24,7 @@ import { SliderItem } from '../../shared/models/slider-item.model';
 export class DashboardComponent implements OnInit {
   private readonly svc = inject(DashboardService);
   private readonly newsService = inject(NewsService);
+  private readonly quoteService = inject(QuoteRequestService);
 
   readonly sliderItems: SliderItem[] = [
     {
@@ -100,24 +102,20 @@ export class DashboardComponent implements OnInit {
     { key: 'category', label: 'Category', type: 'badge' },
   ];
 
-  lineChartData: ChartConfiguration<'line'>['data'] = {
-    labels: [],
+  quoteRequestsChartData: ChartData<'bar'> = {
+    labels: ['New', 'Reviewed', 'Contacted', 'Closed'],
     datasets: [{
-      data: [],
-      label: 'Revenue ($)',
-      fill: true,
-      tension: 0.4,
-      borderColor: '#6366f1',
-      backgroundColor: 'rgba(99, 102, 241, 0.12)',
-      pointBackgroundColor: '#6366f1',
-      pointRadius: 4,
+      data: [0, 0, 0, 0],
+      label: 'Quote Requests',
+      backgroundColor: ['#1d4ed8', '#7c3aed', '#15803d', '#616161'],
+      borderRadius: 4,
     }],
   };
 
-  readonly lineChartOptions: ChartConfiguration<'line'>['options'] = {
+  readonly quoteRequestsChartOptions: ChartConfiguration<'bar'>['options'] = {
     responsive: true,
     maintainAspectRatio: false,
-    plugins: { legend: { display: true, position: 'top' } },
+    plugins: { legend: { display: false } },
     scales: { y: { beginAtZero: true } },
   };
 
@@ -162,10 +160,10 @@ export class DashboardComponent implements OnInit {
       // Same endpoint + sort as the News page — guarantees identical rows
       recentNews: this.newsService.getNews({ page: 0, size: 5, sortBy: 'publishDate', sortDir: 'desc' }),
       projectStatus: this.svc.getProjectStatus(),
-      monthlyRevenue: this.svc.getMonthlyRevenue(),
+      quoteStats: this.quoteService.getStats(),
       weeklySales: this.svc.getWeeklySales(),
     }).subscribe({
-      next: ({ summary, recentNews, projectStatus, monthlyRevenue, weeklySales }) => {
+      next: ({ summary, recentNews, projectStatus, quoteStats, weeklySales }) => {
 
         this._summary.set(summary);
 
@@ -188,17 +186,13 @@ export class DashboardComponent implements OnInit {
           }],
         });
 
-        this.lineChartData = {
-          labels: monthlyRevenue.map(d => d.month),
+        this.quoteRequestsChartData = {
+          labels: ['New', 'Reviewed', 'Contacted', 'Closed'],
           datasets: [{
-            data: monthlyRevenue.map(d => d.revenue),
-            label: 'Revenue ($)',
-            fill: true,
-            tension: 0.4,
-            borderColor: '#6366f1',
-            backgroundColor: 'rgba(99, 102, 241, 0.12)',
-            pointBackgroundColor: '#6366f1',
-            pointRadius: 4,
+            data: [quoteStats.newCount, quoteStats.reviewed, quoteStats.contacted, quoteStats.closed],
+            label: 'Quote Requests',
+            backgroundColor: ['#1d4ed8', '#7c3aed', '#15803d', '#616161'],
+            borderRadius: 4,
           }],
         };
 

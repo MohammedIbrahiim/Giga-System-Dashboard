@@ -6,24 +6,12 @@
     <!-- Title -->
     <mat-form-field appearance="outline" class="full-width">
       <mat-label>Title</mat-label>
-      <input matInput formControlName="title" (input)="onTitleInput()" />
+      <input matInput formControlName="title"  />
       <mat-error *ngIf="form.get('title')?.hasError('required')">Title is required</mat-error>
     </mat-form-field>
 
-    <!-- Slug -->
-    <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Slug</mat-label>
-      <mat-icon matPrefix>link</mat-icon>
-      <input matInput formControlName="slug" (input)="onSlugInput()" />
-      <mat-error *ngIf="form.get('slug')?.hasError('required')">Slug is required</mat-error>
-    </mat-form-field>
 
-    <!-- Short Description -->
-    <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Short Description</mat-label>
-      <textarea matInput formControlName="shortDescription" rows="2"></textarea>
-      <mat-error *ngIf="form.get('shortDescription')?.hasError('required')">Short description is required</mat-error>
-    </mat-form-field>
+
 
     <!-- Content -->
     <mat-form-field appearance="outline" class="full-width">
@@ -69,12 +57,6 @@
         <mat-error *ngIf="form.get('publishDate')?.hasError('required')">Publish date is required</mat-error>
       </mat-form-field>
 
-      <mat-form-field appearance="outline">
-        <mat-label>Expiry Date (optional)</mat-label>
-        <input matInput [matDatepicker]="expiryPicker" formControlName="expiryDate" />
-        <mat-datepicker-toggle matIconSuffix [for]="expiryPicker"></mat-datepicker-toggle>
-        <mat-datepicker #expiryPicker></mat-datepicker>
-      </mat-form-field>
     </div>
 
     <!-- Featured + Pinned toggles -->
@@ -83,21 +65,7 @@
       <mat-slide-toggle formControlName="pinned"   color="accent">Pinned</mat-slide-toggle>
     </div>
 
-    <!-- Tags -->
-    <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Tags</mat-label>
-      <mat-chip-grid #chipGrid>
-        <mat-chip-row *ngFor="let tag of tags()" (removed)="removeTag(tag)">
-          {{ tag }}
-          <button matChipRemove><mat-icon>cancel</mat-icon></button>
-        </mat-chip-row>
-      </mat-chip-grid>
-      <input placeholder="Add tag…"
-             [matChipInputFor]="chipGrid"
-             [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-             (matChipInputTokenEnd)="addTag($event)" />
-    </mat-form-field>
-
+ 
     <!-- Cover Image -->
     <div class="image-upload-field">
       <span class="image-field-label">Cover Image (optional)</span>

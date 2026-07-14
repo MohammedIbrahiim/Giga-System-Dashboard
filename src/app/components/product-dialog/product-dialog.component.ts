@@ -154,7 +154,7 @@ export class ProductDialogComponent implements OnInit {
   }
 
   get showSubcategorySection(): boolean {
-    return this.availableSubOpts().length > 0;
+    return this.selectedFilterType() === 'mainCategory' && this.availableSubOpts().length > 0;
   }
 
   get currentFilterTitle(): string {
@@ -244,8 +244,8 @@ export class ProductDialogComponent implements OnInit {
       sku:                 ['', Validators.required],
       modelNumber:         [''],
       brandId:             [null as number | null, Validators.required],
-      shortDescription:    ['', Validators.required],
-      detailedDescription: [''],
+      shortDescription:    [''],
+      detailedDescription: ['', Validators.required],
       stockStatus:         ['IN_STOCK', Validators.required],
       relatedProductIds:   [[] as number[]],
       // Main Category: numeric ID (from mainCategoryGroup options), required

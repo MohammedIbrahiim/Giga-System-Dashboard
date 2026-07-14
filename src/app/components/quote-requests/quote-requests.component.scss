@@ -34,7 +34,7 @@
     height: 22px;
   }
 
-  &--total    { background: rgba(11,94,215,.1);  color: #0B5ED7; }
+  &--total    { background: rgba(46, 158, 68,.1);  color: #2E9E44; }
   &--new      { background: rgba(59,130,246,.1); color: #1d4ed8; }
   &--reviewed { background: rgba(139,92,246,.1); color: #7c3aed; }
   &--contacted{ background: rgba(22,163,74,.1);  color: #15803d; }
@@ -55,31 +55,6 @@
   color: rgba(0,0,0,.5);
   font-weight: 500;
 }
-
-// ─── Table card ───────────────────────────────────────────────────────────────
-
-.table-card {
-  position: relative;
-  margin-bottom: 24px;
-}
-
-.loading-bar {
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  border-radius: 4px 4px 0 0;
-  z-index: 1;
-}
-
-.table-wrapper { overflow-x: auto; }
-.full-width    { width: 100%; }
-
-.no-data-row td {
-  padding: 20px;
-  text-align: center;
-  color: #9e9e9e;
-}
-
-.table-row:hover { background: rgba(0,0,0,.02); }
 
 // ─── Table cells ─────────────────────────────────────────────────────────────
 
@@ -103,7 +78,7 @@
 
 .email-cell {
   font-size: 13px;
-  color: #0B5ED7;
+  color: #2E9E44;
   white-space: nowrap;
 }
 
@@ -172,6 +147,6 @@
 .delete-label  { color: #d32f2f; }
 
 .status-active {
-  background: rgba(11,94,215,.05);
+  background: rgba(46, 158, 68,.05);
   font-weight: 500;
 }

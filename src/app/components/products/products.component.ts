@@ -29,7 +29,7 @@ import {
 import { ProductService } from '../../core/services/product.service';
 import { PartnerService } from '../../core/services/partner.service';
 import {
-  FilterChip, ProductFilterMetadata,
+  FilterChip, FilterMetaOption, ProductFilterMetadata,
 } from '../../core/models/product-filter-metadata.model';
 import { ProductFilterValue } from '../../core/models/product-filter.model';
 import {
@@ -102,14 +102,24 @@ export class ProductsComponent implements OnInit {
   readonly filterMetadata        = signal<ProductFilterMetadata | null>(null);
   readonly tableFilterType       = signal<string>('');
   readonly tableFilterSelections = signal<Record<string, string[]>>({});
+  readonly tableSubCategoryId    = signal<number | null>(null);
 
-  readonly tableFilterTypeOpts = computed(() =>
-    this.filterMetadata()?.groups.map(g => ({ key: g.key, title: g.title })) ?? []
-  );
+  // Filter Type dropdown: Main Category first, then all other metadata groups
+  readonly tableFilterTypeOpts = computed(() => {
+    const meta = this.filterMetadata();
+    if (!meta) return [];
+    const result: { key: string; title: string }[] = [];
+    if (meta.mainCategoryGroup) {
+      result.push({ key: meta.mainCategoryGroup.key, title: meta.mainCategoryGroup.title });
+    }
+    for (const g of meta.groups) result.push({ key: g.key, title: g.title });
+    return result;
+  });
 
   readonly tableCurrentFilterOpts = computed(() => {
     const type = this.tableFilterType();
     if (!type) return [];
+    if (type === 'mainCategory') return this.filterMetadata()?.mainCategoryGroup?.options ?? [];
     return this.filterMetadata()?.groups.find(g => g.key === type)?.options ?? [];
   });
 
@@ -120,7 +130,33 @@ export class ProductsComponent implements OnInit {
   readonly tableCurrentFilterTitle = computed(() => {
     const type = this.tableFilterType();
     if (!type) return 'Filter Values';
+    if (type === 'mainCategory') return this.filterMetadata()?.mainCategoryGroup?.title ?? 'Main Category';
     return this.filterMetadata()?.groups.find(g => g.key === type)?.title ?? 'Filter Values';
+  });
+
+  // Numeric IDs of the currently selected main categories — used to look up subcategories
+  private readonly tableMainCategoryIds = computed(() => {
+    const meta = this.filterMetadata();
+    if (!meta?.mainCategoryGroup) return [];
+    const selectedVals = this.tableFilterSelections()['mainCategory'] ?? [];
+    return meta.mainCategoryGroup.options
+      .filter(o => selectedVals.includes(o.value))
+      .map(o => o.id)
+      .filter((id): id is number => id != null);
+  });
+
+  // Subcategory options available for the currently selected main category(ies)
+  readonly tableAvailableSubOpts = computed((): FilterMetaOption[] => {
+    const meta = this.filterMetadata();
+    const ids = this.tableMainCategoryIds();
+    if (!meta || !ids.length) return [];
+    const byId = new Map<number, FilterMetaOption>();
+    for (const id of ids) {
+      for (const opt of meta.subcategories[String(id)] ?? []) {
+        if (opt.id != null) byId.set(opt.id, opt);
+      }
+    }
+    return [...byId.values()];
   });
 
   readonly tableFilterChips = computed((): FilterChip[] => {
@@ -128,6 +164,19 @@ export class ProductsComponent implements OnInit {
     if (!metadata) return [];
     const selections = this.tableFilterSelections();
     const chips: FilterChip[] = [];
+
+    if (metadata.mainCategoryGroup) {
+      const vals = selections[metadata.mainCategoryGroup.key] ?? [];
+      for (const val of vals) {
+        chips.push({
+          groupKey:   metadata.mainCategoryGroup.key,
+          groupTitle: metadata.mainCategoryGroup.title,
+          value:      val,
+          label:      metadata.mainCategoryGroup.options.find(o => o.value === val)?.label ?? val,
+        });
+      }
+    }
+
     for (const group of metadata.groups) {
       const vals = selections[group.key] ?? [];
       for (const val of vals) {
@@ -139,6 +188,18 @@ export class ProductsComponent implements OnInit {
         });
       }
     }
+
+    const subId = this.tableSubCategoryId();
+    if (subId != null) {
+      const opt = this.tableAvailableSubOpts().find(o => o.id === subId);
+      chips.push({
+        groupKey:   'subCategory',
+        groupTitle: 'Subcategory',
+        value:      String(subId),
+        label:      opt?.label ?? String(subId),
+      });
+    }
+
     return chips;
   });
 
@@ -216,22 +277,37 @@ export class ProductsComponent implements OnInit {
     if (values.length === 0) delete next[type];
     else next[type] = values;
     this.tableFilterSelections.set(next);
+    // Main category changed — the available subcategory list shifts, so drop the current pick
+    if (type === 'mainCategory') this.tableSubCategoryId.set(null);
+    this.pushQuery();
+  }
+
+  onTableSubCategoryChange(id: number | null): void {
+    this.tableSubCategoryId.set(id);
+    this.pageIndex.set(0);
     this.pushQuery();
   }
 
   removeTableFilterChip(chip: FilterChip): void {
     this.pageIndex.set(0);
+    if (chip.groupKey === 'subCategory') {
+      this.tableSubCategoryId.set(null);
+      this.pushQuery();
+      return;
+    }
     const next = { ...this.tableFilterSelections() };
     const vals = (next[chip.groupKey] ?? []).filter(v => v !== chip.value);
     if (vals.length === 0) delete next[chip.groupKey];
     else next[chip.groupKey] = vals;
     this.tableFilterSelections.set(next);
+    if (chip.groupKey === 'mainCategory') this.tableSubCategoryId.set(null);
     this.pushQuery();
   }
 
   clearTableFilters(): void {
     this.tableFilterSelections.set({});
     this.tableFilterType.set('');
+    this.tableSubCategoryId.set(null);
     this.searchCtrl.setValue('');
     this.brandCtrl.setValue('');
     this.stockCtrl.setValue('');
@@ -244,6 +320,7 @@ export class ProductsComponent implements OnInit {
       this.searchCtrl.value ||
       this.brandCtrl.value  ||
       this.stockCtrl.value  ||
+      this.tableSubCategoryId() != null ||
       Object.keys(this.tableFilterSelections()).length > 0
     );
   }
@@ -344,6 +421,7 @@ export class ProductsComponent implements OnInit {
       brand:         this.brandCtrl.value  || undefined,
       stockStatus:   this.stockCtrl.value  || undefined,
       mainCategory:  this.joinVals(s['mainCategory']),
+      subCategoryId: this.tableSubCategoryId() ?? undefined,
       application:   this.joinVals(s['application']),
       parameter:     this.joinVals(s['parameter']),
       communication: this.joinVals(s['communication']),

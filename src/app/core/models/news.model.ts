@@ -34,17 +34,13 @@ export interface NewsArticleImage {
 
 export interface NewsArticleRequest {
   title: string;
-  slug: string;
-  shortDescription: string;
   content: string;
   author: string;
   publishDate: string;
-  expiryDate?: string | null;
   category: NewsCategory;
   status: NewsStatus;
   featured: boolean;
   pinned: boolean;
-  tags?: string;
   coverImageBase64?: string | null;
   imagesBase64?: string[];
 }

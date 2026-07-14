@@ -11,6 +11,7 @@
     </button>
   </div>
 
+  <p class="list-section-label">Filter Partners</p>
   <app-filter-bar
     searchPlaceholder="Search partners…"
     [showStatus]="true"
@@ -18,6 +19,7 @@
     (filtersChange)="onFiltersChange($event)">
   </app-filter-bar>
 
+  <p class="list-section-label">Partner Table</p>
   <mat-card class="table-card">
     <mat-progress-bar *ngIf="loading()" mode="indeterminate" class="loading-bar"></mat-progress-bar>
 
@@ -58,11 +60,7 @@
             </td>
           </ng-container>
 
-          <!-- Slug -->
-          <ng-container matColumnDef="slug">
-            <th mat-header-cell *matHeaderCellDef>Slug</th>
-            <td mat-cell *matCellDef="let p" class="slug-cell">{{ p.slug }}</td>
-          </ng-container>
+
 
           <!-- Status -->
           <ng-container matColumnDef="status">
@@ -74,11 +72,7 @@
             </td>
           </ng-container>
 
-          <!-- Sort Order -->
-          <ng-container matColumnDef="sortOrder">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header="sortOrder">Order</th>
-            <td mat-cell *matCellDef="let p" class="order-cell">{{ p.sortOrder }}</td>
-          </ng-container>
+
 
           <!-- Offers count -->
           <ng-container matColumnDef="offers">
@@ -95,11 +89,6 @@
           <ng-container matColumnDef="actions">
             <th mat-header-cell *matHeaderCellDef class="actions-header"></th>
             <td mat-cell *matCellDef="let p" class="actions-cell">
-              <button mat-icon-button color="primary"
-                      (click)="openEditDialog(p)" matTooltip="Edit">
-                <mat-icon>edit</mat-icon>
-              </button>
-
               <button mat-icon-button [matMenuTriggerFor]="moreMenu" matTooltip="More actions">
                 <mat-icon>more_vert</mat-icon>
               </button>

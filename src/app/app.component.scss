@@ -1,40 +1,49 @@
 .sidenav-container {
   height: 100vh;
+
+  // Belt-and-suspenders: page content should never be able to push a
+  // horizontal scrollbar onto the shell itself (grid/chart children can
+  // otherwise force their track wider than their fr-share allows).
+  ::ng-deep .mat-drawer-content {
+    overflow-x: hidden;
+  }
+
+  // Drive the content offset ourselves instead of relying on the CDK's
+  // auto margin-sync, which lags/desyncs when the drawer's width changes
+  // via a CSS class toggle rather than an opened/closed transition.
+  &.side-mode ::ng-deep .mat-drawer-content {
+    margin-left: 256px !important;
+    transition: margin-left 0.2s ease;
+  }
+
+  &.side-mode.collapsed ::ng-deep .mat-drawer-content {
+    margin-left: 72px !important;
+  }
 }
 
 // ─── Sidebar ───────────────────────────────────────────────────────────────
 
 .sidenav {
   width: 256px;
-  background: linear-gradient(180deg, #0d1b2a 0%, #1a2c45 100%);
+  background: linear-gradient(180deg, #0f1210 0%, #1b201c 100%);
   color: white;
   display: flex;
   flex-direction: column;
   border-right: none !important;
+  transition: width 0.2s ease;
+  overflow-x: hidden;
 
   .brand {
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 22px 20px;
+    justify-content: center;
+    padding: 18px 20px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.07);
 
-    .brand-logo {
-      width: 38px;
-      height: 38px;
-      border-radius: 10px;
-      background: linear-gradient(135deg, #0B5ED7, #1565C0);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      mat-icon { color: white; font-size: 20px; width: 20px; height: 20px; }
-    }
-
-    .brand-name {
-      font-size: 17px;
-      font-weight: 600;
-      letter-spacing: 0.2px;
+    .brand-logo-img {
+      height: 36px;
+      width: auto;
+      display: block;
     }
   }
 
@@ -49,6 +58,31 @@
     text-transform: uppercase;
     letter-spacing: 1.5px;
     color: rgba(255, 255, 255, 0.3);
+    white-space: nowrap;
+  }
+
+  // ─── Collapsed (icon-rail) state ────────────────────────────────────────
+  &.collapsed {
+    width: 72px;
+
+    .brand-logo-img { display: none; }
+    .nav-section-label { opacity: 0; }
+    .user-mini-info { display: none; }
+    .user-mini { justify-content: center; }
+
+    ::ng-deep .mat-mdc-list-item {
+      justify-content: center;
+      margin: 1px 8px;
+      width: calc(100% - 16px) !important;
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+
+      .mdc-list-item__content { display: none; }
+      .mat-mdc-list-item-icon,
+      .mdc-list-item__start {
+        margin: 0 !important;
+      }
+    }
   }
 
   ::ng-deep .mat-mdc-list-item {
@@ -61,10 +95,10 @@
     .mat-icon { color: rgba(255, 255, 255, 0.45); }
 
     &.active-link {
-      background: rgba(11, 94, 215, 0.28) !important;
+      background: rgba(46, 158, 68, 0.28) !important;
       color: #fff !important;
-      box-shadow: inset 3px 0 0 #60a5fa;
-      .mat-icon { color: #93c5fd; }
+      box-shadow: inset 3px 0 0 #4ade80;
+      .mat-icon { color: #4ade80; }
       span { font-weight: 600; }
     }
 
@@ -89,7 +123,7 @@
     width: 34px;
     height: 34px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #0B5ED7, #1565C0);
+    background: linear-gradient(135deg, #2E9E44, #1B7A34);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -146,14 +180,20 @@
   .spacer { flex: 1; }
 
   .profile-btn {
-    display: flex;
-    align-items: center;
-    gap: 6px;
     margin-left: 6px;
     border-radius: 24px;
-    padding: 4px 10px 4px 6px;
+    padding: 4px 8px 4px 4px;
     height: 40px;
     min-width: 0;
+
+    // Angular Material wraps projected button content in .mdc-button__label —
+    // the flex layout has to live there, not on the button host, or the
+    // avatar/name/chevron stack vertically instead of sitting in a row.
+    ::ng-deep .mdc-button__label {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
 
     .toolbar-avatar {
       width: 30px;
@@ -203,4 +243,8 @@
 }
 .mdc-list-item__primary-text{
   color: white !important;
+}
+
+.sidenav.collapsed .nav-label {
+  display: none;
 }

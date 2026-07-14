@@ -12,6 +12,7 @@
   </div>
 
   <!-- Filters -->
+  <p class="list-section-label">Filter News</p>
   <app-filter-bar
     searchPlaceholder="Search articles…"
     [showCategory]="true"
@@ -26,6 +27,7 @@
   </app-filter-bar>
 
   <!-- Table Card -->
+  <p class="list-section-label">News Table</p>
   <mat-card class="table-card">
     <mat-progress-bar *ngIf="loading()" mode="indeterminate" class="loading-bar"></mat-progress-bar>
 
@@ -144,16 +146,14 @@
           <ng-container matColumnDef="actions">
             <th mat-header-cell *matHeaderCellDef class="actions-header"></th>
             <td mat-cell *matCellDef="let a" class="actions-cell">
-              <button mat-icon-button color="primary"
-                      (click)="openEditDialog(a)" matTooltip="Edit">
-                <mat-icon>edit</mat-icon>
-              </button>
-
               <button mat-icon-button [matMenuTriggerFor]="moreMenu"
                       matTooltip="More actions">
                 <mat-icon>more_vert</mat-icon>
               </button>
               <mat-menu #moreMenu="matMenu">
+                <button mat-menu-item (click)="openEditDialog(a)">
+                  <mat-icon>edit</mat-icon><span>Edit</span>
+                </button>
                 <button mat-menu-item *ngIf="a.status !== 'PUBLISHED'" (click)="onPublish(a)">
                   <mat-icon>publish</mat-icon>
                   <span>Publish</span>

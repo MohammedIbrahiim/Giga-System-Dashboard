@@ -25,7 +25,7 @@
 .section-label {
   font-size: 12px;
   font-weight: 600;
-  color: #0B5ED7;
+  color: #2E9E44;
   text-transform: uppercase;
   letter-spacing: 0.6px;
   margin: 8px 0 4px;
@@ -126,7 +126,7 @@
   bottom: 5px;
   left: 50%;
   transform: translateX(-50%);
-  background: rgba(11, 94, 215, 0.88);
+  background: rgba(46, 158, 68, 0.88);
   color: #fff;
   font-size: 9.5px;
   font-weight: 700;
@@ -143,8 +143,8 @@
   width: 96px;
   height: 96px;
   border-radius: 12px;
-  background: rgba(11, 94, 215, 0.07);
-  border: 2px dashed rgba(11, 94, 215, 0.35);
+  background: rgba(46, 158, 68, 0.07);
+  border: 2px dashed rgba(46, 158, 68, 0.35);
 }
 
 // Preview floating under cursor
@@ -272,7 +272,7 @@
     font-size: 18px;
     width: 18px;
     height: 18px;
-    color: #0B5ED7;
+    color: #2E9E44;
   }
 }
 
@@ -285,8 +285,8 @@
   gap: 8px;
   margin: 4px 0 12px;
   padding: 10px 12px;
-  background: rgba(11, 94, 215, 0.04);
-  border: 1px solid rgba(11, 94, 215, 0.12);
+  background: rgba(46, 158, 68, 0.04);
+  border: 1px solid rgba(46, 158, 68, 0.12);
   border-radius: 8px;
 
   mat-chip-set {
@@ -297,13 +297,14 @@
 .chip-group-label {
   font-size: 11px;
   font-weight: 600;
-  color: #0B5ED7;
+  color: #2E9E44;
   text-transform: uppercase;
   letter-spacing: 0.4px;
 }
 
 .clear-filters-btn {
-  flex-shrink: 0;
+  align-self: flex-start;
+  margin: 0 0 12px;
   font-size: 12px;
 
   mat-icon {
@@ -344,4 +345,11 @@
   flex-direction: column;
   gap: 4px;
   margin-bottom: 4px;
+}
+
+@media (max-width: 600px) {
+  .dialog-form { min-width: 0; }
+  .two-col, .three-col { grid-template-columns: 1fr; }
+  .filter-selector-row { grid-template-columns: 1fr; }
+  .specs-header, .specs-row { grid-template-columns: 1fr 1fr 70px 32px; }
 }

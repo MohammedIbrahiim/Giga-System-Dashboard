@@ -10,19 +10,19 @@ html, body {
   font-family: Roboto, 'Helvetica Neue', sans-serif;
 }
 
-// ─── Global theme override: #0B5ED7 ───────────────────────────────────────
+// ─── Global theme override: #2E9E44 (from the Giga Systems logo) ──────────
 
-$primary: #0B5ED7;
+$primary: #2E9E44;
 
 mat-toolbar.mat-primary { background: $primary !important; }
 
 .mat-mdc-raised-button.mat-primary {
-  --mdc-protected-button-container-color: #{$primary};
-  background-color: $primary !important;
+  background: $primary !important;
+  border: none !important;
 }
 .mat-mdc-unelevated-button.mat-primary {
-  --mdc-filled-button-container-color: #{$primary};
-  background-color: $primary !important;
+  background: $primary !important;
+  border: none !important;
 }
 .mat-mdc-outlined-button.mat-primary   { color: $primary !important; border-color: $primary !important; }
 .mat-mdc-icon-button.mat-primary       { color: $primary !important; }
@@ -37,7 +37,7 @@ mat-toolbar.mat-primary { background: $primary !important; }
 
 .mat-mdc-progress-bar {
   --mdc-linear-progress-active-indicator-color: #{$primary};
-  --mdc-linear-progress-track-color: rgba(11, 94, 215, 0.15);
+  --mdc-linear-progress-track-color: rgba(46, 158, 68, 0.15);
 }
 
 .mat-mdc-paginator .mat-mdc-icon-button:not([disabled]) { color: $primary !important; }
@@ -52,7 +52,7 @@ mat-toolbar.mat-primary { background: $primary !important; }
 .mat-mdc-option.mdc-list-item--selected:not(.mat-mdc-option-multiple) .mdc-list-item__primary-text {
   color: $primary !important;
 }
-.mat-mdc-option.mat-mdc-option-active { background: rgba(11, 94, 215, 0.08) !important; }
+.mat-mdc-option.mat-mdc-option-active { background: rgba(46, 158, 68, 0.08) !important; }
 
 // ─── Profile dropdown (rendered in CDK overlay, outside component scope) ──
 
@@ -69,7 +69,7 @@ mat-toolbar.mat-primary { background: $primary !important; }
   width: 42px;
   height: 42px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #0B5ED7, #1565C0);
+  background: linear-gradient(135deg, #2E9E44, #1B7A34);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -200,4 +200,19 @@ mat-toolbar.mat-primary { background: $primary !important; }
 
 .error-snackbar .mat-mdc-snack-bar-action {
   color: rgba(255, 255, 255, 0.87) !important;
+}
+
+
+// ─── Responsive dialogs ────────────────────────────────────────────────────
+// Every dialog is opened with a fixed pixel width (420–760px). Material's
+// own default maxWidth (80vw) already keeps the panel on-screen, but this
+// is a safety net in case any future dialog config overrides that.
+
+@media (max-width: 600px) {
+  .cdk-overlay-pane {
+    max-width: 96vw !important;
+  }
+}
+.stat-value{
+  text-align: center;
 }

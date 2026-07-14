@@ -7,6 +7,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { EMPTY, switchMap } from 'rxjs';
@@ -31,6 +33,8 @@ const ERR      = { duration: 4000, panelClass: ['error-snackbar'],   horizontalP
     MatCardModule,
     MatProgressBarModule,
     MatCheckboxModule,
+    MatMenuModule,
+    MatTooltipModule,
   ],
   templateUrl: './users.component.html',
   styleUrls: ['./users.component.scss'],

@@ -1,3 +1,5 @@
+@import '../../../page-layout';
+
 /* Dashboard Styles */
 .dashboard {
   max-width: 1400px;
@@ -16,6 +18,7 @@
   align-items: center;
   gap: 16px;
   padding: 20px;
+  min-width: 0;
 }
 
 .stat-icon-wrap {
@@ -68,6 +71,9 @@
 }
 
 .chart-card {
+  border-radius: $card-radius;
+  min-width: 0;
+
   mat-card-content {
     padding-top: 8px;
   }
@@ -76,6 +82,8 @@
 .chart-container {
   height: 240px;
   position: relative;
+  min-width: 0;
+  overflow: hidden;
 }
 
 /* Ensure the full-width chart spans the entire row */

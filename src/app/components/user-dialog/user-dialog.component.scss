@@ -88,7 +88,7 @@ mat-dialog-content {
     .mdc-notched-outline__leading,
     .mdc-notched-outline__notch,
     .mdc-notched-outline__trailing {
-      border-color: #0B5ED7 !important;
+      border-color: #2E9E44 !important;
     }
   }
 
@@ -96,10 +96,10 @@ mat-dialog-content {
     .mdc-notched-outline__leading,
     .mdc-notched-outline__notch,
     .mdc-notched-outline__trailing {
-      border-color: #0B5ED7 !important;
+      border-color: #2E9E44 !important;
       border-width: 2px !important;
     }
-    .mat-mdc-floating-label { color: #0B5ED7 !important; }
+    .mat-mdc-floating-label { color: #2E9E44 !important; }
   }
 
   &.mat-form-field-invalid {
@@ -118,4 +118,8 @@ mat-dialog-content {
 ::ng-deep .mat-mdc-form-field-error {
   color: #e53935;
   font-size: 11.5px;
+}
+
+@media (max-width: 600px) {
+  mat-dialog-content { min-width: 0; }
 }

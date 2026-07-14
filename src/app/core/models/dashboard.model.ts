@@ -18,11 +18,6 @@ export interface ProjectStatusChartItem {
   count: number;
 }
 
-export interface MonthlyRevenueItem {
-  month: string;
-  revenue: number;
-}
-
 export interface WeeklySalesItem {
   day: string;
   units: number;

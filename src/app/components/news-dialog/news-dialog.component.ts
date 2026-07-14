@@ -15,6 +15,7 @@ import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { finalize } from 'rxjs/operators';
 import { NewsService } from '../../core/services/news.service';
+import { AuthService } from '../../services/auth.service';
 import {
   NewsArticle, NewsArticleRequest, NewsDialogData,
   CATEGORY_OPTIONS, STATUS_OPTIONS,
@@ -53,11 +54,11 @@ export class NewsDialogComponent implements OnInit {
   readonly categoryOptions    = CATEGORY_OPTIONS;
   readonly statusOptions      = STATUS_OPTIONS;
 
-  private autoSlug = true;
 
   constructor(
     private readonly fb:          FormBuilder,
     private readonly newsService: NewsService,
+    private readonly authService: AuthService,
     public  readonly dialogRef:   MatDialogRef<NewsDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public readonly data: NewsDialogData,
   ) {}
@@ -68,31 +69,32 @@ export class NewsDialogComponent implements OnInit {
   ngOnInit(): void {
     this.form = this.fb.group({
       title:            ['', Validators.required],
-      slug:             ['', Validators.required],
-      shortDescription: ['', Validators.required],
       content:          ['', Validators.required],
       author:           ['', Validators.required],
       category:         ['', Validators.required],
       status:           ['DRAFT', Validators.required],
       publishDate:      [null, Validators.required],
-      expiryDate:       [null],
       featured:         [false],
       pinned:           [false],
     });
 
+    if (this.isAdd) {
+      this.form.patchValue({
+        author:      this.authService.name(),
+        publishDate: new Date(),
+      });
+      this.form.get('author')?.disable();
+    }
+
     if (this.isEdit && this.data.article) {
       const a: NewsArticle = this.data.article;
-      this.autoSlug = false;
       this.form.patchValue({
         title:            a.title,
-        slug:             a.slug,
-        shortDescription: a.shortDescription,
         content:          a.content,
         author:           a.author,
         category:         a.category,
         status:           a.status,
         publishDate:      a.publishDate ? new Date(a.publishDate) : null,
-        expiryDate:       a.expiryDate  ? new Date(a.expiryDate)  : null,
         featured:         a.featured,
         pinned:           a.pinned,
       });
@@ -106,25 +108,10 @@ export class NewsDialogComponent implements OnInit {
     }
   }
 
-  onTitleInput(): void {
-    if (!this.autoSlug) return;
-    const title: string = this.form.get('title')!.value ?? '';
-    this.form.get('slug')!.setValue(this.toSlug(title), { emitEvent: false });
-  }
 
-  onSlugInput(): void {
-    this.autoSlug = false;
-  }
 
-  addTag(event: MatChipInputEvent): void {
-    const val = (event.value ?? '').trim();
-    if (val) this.tags.update(t => [...t, val]);
-    event.chipInput!.clear();
-  }
 
-  removeTag(tag: string): void {
-    this.tags.update(t => t.filter(x => x !== tag));
-  }
+
 
   async onCoverSelect(event: Event): Promise<void> {
     const file = (event.target as HTMLInputElement).files?.[0];
@@ -153,11 +140,9 @@ export class NewsDialogComponent implements OnInit {
     if (this.form.invalid) { this.form.markAllAsTouched(); return; }
     this.loading.set(true);
 
-    const v = this.form.value;
+    const v = this.form.getRawValue();
     const payload: NewsArticleRequest = {
       title:            v.title,
-      slug:             v.slug,
-      shortDescription: v.shortDescription,
       content:          v.content,
       author:           v.author,
       category:         v.category,
@@ -165,8 +150,6 @@ export class NewsDialogComponent implements OnInit {
       featured:         v.featured ?? false,
       pinned:           v.pinned   ?? false,
       publishDate:      this.fmtDate(v.publishDate),
-      expiryDate:       v.expiryDate ? this.fmtDate(v.expiryDate) : null,
-      tags:             this.tags().join(',') || undefined,
       coverImageBase64: this.coverPreview() ?? null,
       imagesBase64:     this.galleryPreviews(),
     };
@@ -183,13 +166,6 @@ export class NewsDialogComponent implements OnInit {
 
   onCancel(): void { this.dialogRef.close(null); }
 
-  private toSlug(title: string): string {
-    return title.toLowerCase()
-      .replace(/[^a-z0-9\s-]/g, '')
-      .trim()
-      .replace(/\s+/g, '-')
-      .replace(/-+/g, '-');
-  }
 
   private fmtDate(date: Date | string | null): string {
     if (!date) return '';
