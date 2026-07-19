@@ -55,28 +55,7 @@
   <div class="charts-row">
 
 
-    <mat-card class="chart-card">
-      <mat-card-header>
-        <mat-card-title>Weekly Sales</mat-card-title>
-        <mat-card-subtitle>Units sold this week</mat-card-subtitle>
-      </mat-card-header>
-      <mat-card-content>
-        <div class="chart-container">
-          <canvas baseChart [type]="'bar'" [data]="barChartData" [options]="barChartOptions"></canvas>
-        </div>
-      </mat-card-content>
-    </mat-card>
-  <mat-card class="chart-card half-width">
-    <mat-card-header>
-      <mat-card-title>Project Status</mat-card-title>
-      <mat-card-subtitle>Distribution overview</mat-card-subtitle>
-    </mat-card-header>
-    <mat-card-content>
-      <div class="chart-container">
-        <canvas baseChart [type]="'doughnut'" [data]="doughnutChartData()" [options]="doughnutChartOptions"></canvas>
-      </div>
-    </mat-card-content>
-  </mat-card>
+
   </div>
 
   <!-- Product Slider -->
