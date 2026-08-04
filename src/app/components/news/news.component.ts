@@ -64,7 +64,7 @@ export class NewsComponent implements OnInit {
 
   readonly displayedColumns = [
     'index', 'cover', 'title', 'category', 'status',
-    'featured', 'pinned', 'author', 'publishDate', 'images', 'actions',
+     'pinned', 'author', 'publishDate', 'images', 'actions',
   ];
 
   readonly categorySelectOptions: SelectOption[] = CATEGORY_OPTIONS;
@@ -113,7 +113,6 @@ export class NewsComponent implements OnInit {
       search:   f.search   || undefined,
       category: f.category || undefined,
       status:   f.status   || undefined,
-      featured: f.featured === 'true' ? true : f.featured === 'false' ? false : undefined,
       pinned:   f.pinned   === 'true' ? true : f.pinned   === 'false' ? false : undefined,
       fromDate: f.fromDate || undefined,
       toDate:   f.toDate   || undefined,
@@ -204,16 +203,6 @@ export class NewsComponent implements OnInit {
     });
   }
 
-  onToggleFeatured(article: NewsArticle, featured: boolean): void {
-    this.updateArticle({ ...article, featured });
-    this.newsService.toggleFeatured(article.id, featured).subscribe({
-      next: updated => this.updateArticle(updated),
-      error: () => {
-        this.updateArticle({ ...article });
-        this.snackBar.open('Failed to update featured status', '✕', ERR);
-      },
-    });
-  }
 
   onTogglePinned(article: NewsArticle, pinned: boolean): void {
     this.updateArticle({ ...article, pinned });

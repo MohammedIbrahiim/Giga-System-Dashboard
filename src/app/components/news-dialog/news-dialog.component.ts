@@ -98,6 +98,7 @@ export class NewsDialogComponent implements OnInit {
         featured:         a.featured,
         pinned:           a.pinned,
       });
+      this.form.get('author')?.disable();
       this.tags.set(a.tags ? a.tags.split(',').map(t => t.trim()).filter(Boolean) : []);
       if (a.coverImageBase64) {
         this.coverPreview.set(formatBase64Image(a.coverImageBase64));

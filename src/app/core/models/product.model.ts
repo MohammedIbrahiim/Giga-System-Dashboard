@@ -120,16 +120,9 @@ export interface ProductQueryParams {
   brand?: string;
   subCategoryId?: number;
   stockStatus?: string;
-  // dynamic filter metadata keys (comma-separated values)
-  mainCategory?: string;
-  application?: string;
-  parameter?: string;
-  communication?: string;
-  installation?: string;
-  power?: string;
-  environment?: string;
-  outputSignal?: string;
-  compliance?: string;
+  // selected option ID for whichever generic filter group (application, parameter,
+  // communication, installation, power, environment, outputSignal, compliance) is active
+  filterValueId?: number;
 }
 
 export interface ProductDialogData {

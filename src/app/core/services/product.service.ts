@@ -32,15 +32,7 @@ export class ProductService {
     if (params.brand)                       p = p.set('brand',          params.brand);
     if (params.subCategoryId !== undefined) p = p.set('subCategoryId',  params.subCategoryId);
     if (params.stockStatus)                 p = p.set('stockStatus',    params.stockStatus);
-    if (params.mainCategory)  p = p.set('mainCategory',  params.mainCategory);
-    if (params.application)   p = p.set('application',   params.application);
-    if (params.parameter)     p = p.set('parameter',     params.parameter);
-    if (params.communication) p = p.set('communication', params.communication);
-    if (params.installation)  p = p.set('installation',  params.installation);
-    if (params.power)         p = p.set('power',         params.power);
-    if (params.environment)   p = p.set('environment',   params.environment);
-    if (params.outputSignal)  p = p.set('outputSignal',  params.outputSignal);
-    if (params.compliance)    p = p.set('compliance',    params.compliance);
+    if (params.filterValueId !== undefined) p = p.set('filterValueId',  params.filterValueId);
     return this.http
       .get<ApiResponse<PageResponse<Product>>>(this.url, { params: p })
       .pipe(map(r => r.data));

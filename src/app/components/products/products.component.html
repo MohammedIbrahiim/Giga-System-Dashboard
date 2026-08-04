@@ -53,13 +53,27 @@
         </mat-select>
       </mat-form-field>
 
+      <!-- Main Category: single-select by numeric ID (sent to the API as categoryId) -->
       <mat-form-field appearance="outline" class="filter-values-field"
-                      *ngIf="tableFilterType()">
+                      *ngIf="tableFilterType() === 'mainCategory'">
         <mat-label>{{ tableCurrentFilterTitle() }}</mat-label>
-        <mat-select multiple
-                    [value]="tableCurrentValues()"
-                    (selectionChange)="onTableFilterValuesChange($event.value)">
-          <mat-option *ngFor="let opt of tableCurrentFilterOpts()" [value]="opt.value">
+        <mat-select [value]="tableCategoryId()"
+                    (selectionChange)="onTableCategoryChange($event.value)">
+          <mat-option [value]="null">All Categories</mat-option>
+          <mat-option *ngFor="let opt of tableCurrentFilterOpts()" [value]="opt.id">
+            {{ opt.label }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <!-- All other filter types: single-select by numeric ID (sent to the API as filterValueId) -->
+      <mat-form-field appearance="outline" class="filter-values-field"
+                      *ngIf="tableFilterType() && tableFilterType() !== 'mainCategory'">
+        <mat-label>{{ tableCurrentFilterTitle() }}</mat-label>
+        <mat-select [value]="tableFilterValueId()"
+                    (selectionChange)="onTableFilterValueChange($event.value)">
+          <mat-option [value]="null">All {{ tableCurrentFilterTitle() }}</mat-option>
+          <mat-option *ngFor="let opt of tableCurrentFilterOpts()" [value]="opt.id">
             {{ opt.label }}
           </mat-option>
         </mat-select>
