@@ -1,0 +1,127 @@
+<h2 mat-dialog-title>{{ isAdd ? 'Add Career' : 'Edit Career' }}</h2>
+
+<mat-dialog-content *ngIf="form">
+  <form [formGroup]="form" novalidate class="dialog-form">
+
+    <!-- ── Basic Information ─────────────────────────────────────────── -->
+    <p class="section-label">Basic Information</p>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Title</mat-label>
+      <input matInput formControlName="title" />
+      <mat-error *ngIf="form.get('title')?.hasError('required')">Title is required</mat-error>
+      <mat-error *ngIf="form.get('title')?.hasError('maxlength')">Title is too long</mat-error>
+    </mat-form-field>
+
+    <div class="two-col">
+      <mat-form-field appearance="outline">
+        <mat-label>Location</mat-label>
+        <input matInput formControlName="location" />
+        <mat-error *ngIf="form.get('location')?.hasError('required')">Location is required</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Employment Type</mat-label>
+        <mat-select formControlName="employmentType">
+          <mat-option *ngFor="let opt of employmentTypeOptions" [value]="opt.value">{{ opt.label }}</mat-option>
+        </mat-select>
+        <mat-error *ngIf="form.get('employmentType')?.hasError('required')">Required</mat-error>
+      </mat-form-field>
+    </div>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Application Deadline (optional)</mat-label>
+      <input matInput [matDatepicker]="deadlinePicker" formControlName="applicationDeadline" />
+      <mat-datepicker-toggle matIconSuffix [for]="deadlinePicker"></mat-datepicker-toggle>
+      <mat-datepicker #deadlinePicker></mat-datepicker>
+    </mat-form-field>
+
+    <div class="toggles-row">
+      <mat-slide-toggle formControlName="active" color="primary">Active</mat-slide-toggle>
+      <mat-slide-toggle formControlName="published" color="accent">Published</mat-slide-toggle>
+    </div>
+
+    <mat-divider class="section-divider"></mat-divider>
+
+    <!-- ── About the Role ────────────────────────────────────────────── -->
+    <p class="section-label">About the Role</p>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>About the Role</mat-label>
+      <textarea matInput formControlName="aboutRole" rows="4"></textarea>
+      <mat-error *ngIf="form.get('aboutRole')?.hasError('required')">Required</mat-error>
+    </mat-form-field>
+
+    <mat-divider class="section-divider"></mat-divider>
+
+    <!-- ── Responsibilities ──────────────────────────────────────────── -->
+    <p class="section-label">Responsibilities</p>
+
+    <div formArrayName="responsibilities">
+      <div class="item-list">
+        <div *ngFor="let ctrl of responsibilities.controls; let i = index" class="item-row">
+          <input class="item-input" [formControlName]="i" placeholder="e.g. Identify and develop new business opportunities" />
+          <button mat-icon-button type="button" color="warn"
+                  [disabled]="responsibilities.length <= 1"
+                  (click)="removeResponsibility(i)" matTooltip="Remove">
+            <mat-icon>remove_circle_outline</mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+    <button mat-stroked-button type="button" class="add-item-btn" (click)="addResponsibility()">
+      <mat-icon>add</mat-icon> Add Responsibility
+    </button>
+
+    <mat-divider class="section-divider"></mat-divider>
+
+    <!-- ── Requirements ───────────────────────────────────────────────── -->
+    <p class="section-label">Requirements</p>
+
+    <div formArrayName="requirements">
+      <div class="item-list">
+        <div *ngFor="let ctrl of requirements.controls; let i = index" class="item-row">
+          <input class="item-input" [formControlName]="i" placeholder="e.g. 1-3 years of experience in technical sales" />
+          <button mat-icon-button type="button" color="warn"
+                  [disabled]="requirements.length <= 1"
+                  (click)="removeRequirement(i)" matTooltip="Remove">
+            <mat-icon>remove_circle_outline</mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+    <button mat-stroked-button type="button" class="add-item-btn" (click)="addRequirement()">
+      <mat-icon>add</mat-icon> Add Requirement
+    </button>
+
+    <mat-divider class="section-divider"></mat-divider>
+
+    <!-- ── Benefits ───────────────────────────────────────────────────── -->
+    <p class="section-label">Benefits</p>
+
+    <div formArrayName="benefits">
+      <div class="item-list">
+        <div *ngFor="let ctrl of benefits.controls; let i = index" class="item-row">
+          <input class="item-input" [formControlName]="i" placeholder="e.g. Competitive salary and benefits" />
+          <button mat-icon-button type="button" color="warn"
+                  [disabled]="benefits.length <= 1"
+                  (click)="removeBenefit(i)" matTooltip="Remove">
+            <mat-icon>remove_circle_outline</mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+    <button mat-stroked-button type="button" class="add-item-btn" (click)="addBenefit()">
+      <mat-icon>add</mat-icon> Add Benefit
+    </button>
+
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button type="button" (click)="onCancel()">Cancel</button>
+  <button mat-raised-button color="primary" type="button"
+          (click)="onSubmit()" [disabled]="form.invalid || loading()">
+    {{ loading() ? 'Saving…' : 'Save' }}
+  </button>
+</mat-dialog-actions>

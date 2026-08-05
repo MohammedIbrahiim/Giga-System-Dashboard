@@ -46,6 +46,18 @@ export const routes: Routes = [
       import('./components/quote-requests/quote-requests.component').then(m => m.QuoteRequestsComponent),
   },
   {
+    path: 'careers',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./components/careers/careers.component').then(m => m.CareersComponent),
+  },
+  {
+    path: 'career-applications',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./components/career-applications/career-applications.component').then(m => m.CareerApplicationsComponent),
+  },
+  {
     path: 'contact-messages',
     canActivate: [authGuard],
     loadComponent: () =>

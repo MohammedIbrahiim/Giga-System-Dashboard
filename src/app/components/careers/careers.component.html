@@ -1,0 +1,151 @@
+<div class="page-container">
+
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Careers</h1>
+      <p class="page-subtitle">{{ totalElements() }} job{{ totalElements() !== 1 ? 's' : '' }}</p>
+    </div>
+    <button mat-raised-button color="primary" (click)="openAddDialog()">
+      <mat-icon>add</mat-icon>
+      Add Career
+    </button>
+  </div>
+
+  <!-- Filters -->
+  <p class="list-section-label">Filter Careers</p>
+  <app-filter-bar
+    searchPlaceholder="Search careers…"
+    (filtersChange)="onFiltersChange($event)">
+  </app-filter-bar>
+
+  <!-- Table Card -->
+  <p class="list-section-label">Careers Table</p>
+  <mat-card class="table-card">
+    <mat-progress-bar *ngIf="loading()" mode="indeterminate" class="loading-bar"></mat-progress-bar>
+
+    <mat-card-content>
+      <div class="table-wrapper">
+        <table mat-table [dataSource]="careers()" class="full-width">
+
+          <!-- # -->
+          <ng-container matColumnDef="index">
+            <th mat-header-cell *matHeaderCellDef>#</th>
+            <td mat-cell *matCellDef="let c; let i = index">{{ rowIndex(i) }}</td>
+          </ng-container>
+
+          <!-- Title -->
+          <ng-container matColumnDef="title">
+            <th mat-header-cell *matHeaderCellDef>Title</th>
+            <td mat-cell *matCellDef="let c" class="title-cell">{{ c.title }}</td>
+          </ng-container>
+
+          <!-- Location -->
+          <ng-container matColumnDef="location">
+            <th mat-header-cell *matHeaderCellDef>Location</th>
+            <td mat-cell *matCellDef="let c" class="location-cell">{{ c.location }}</td>
+          </ng-container>
+
+          <!-- Employment Type -->
+          <ng-container matColumnDef="employmentType">
+            <th mat-header-cell *matHeaderCellDef>Employment Type</th>
+            <td mat-cell *matCellDef="let c" class="type-cell">{{ c.employmentType }}</td>
+          </ng-container>
+
+          <!-- Published -->
+          <ng-container matColumnDef="published">
+            <th mat-header-cell *matHeaderCellDef>Published</th>
+            <td mat-cell *matCellDef="let c">
+              <span class="badge" [ngClass]="c.published ? 'badge-published' : 'badge-draft'">
+                {{ c.published ? 'Published' : 'Unpublished' }}
+              </span>
+            </td>
+          </ng-container>
+
+          <!-- Active -->
+          <ng-container matColumnDef="active">
+            <th mat-header-cell *matHeaderCellDef>Active</th>
+            <td mat-cell *matCellDef="let c">
+              <span class="badge" [ngClass]="c.active ? 'badge-active' : 'badge-inactive'">
+                {{ c.active ? 'Active' : 'Inactive' }}
+              </span>
+            </td>
+          </ng-container>
+
+          <!-- Deadline -->
+          <ng-container matColumnDef="deadline">
+            <th mat-header-cell *matHeaderCellDef>Deadline</th>
+            <td mat-cell *matCellDef="let c" class="date-cell">
+              {{ c.applicationDeadline ? (c.applicationDeadline | date:'mediumDate') : '—' }}
+            </td>
+          </ng-container>
+
+          <!-- Created At -->
+          <ng-container matColumnDef="createdAt">
+            <th mat-header-cell *matHeaderCellDef>Created At</th>
+            <td mat-cell *matCellDef="let c" class="date-cell">
+              {{ c.createdAt | date:'mediumDate' }}
+            </td>
+          </ng-container>
+
+          <!-- Actions -->
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef class="actions-header"></th>
+            <td mat-cell *matCellDef="let c" class="actions-cell">
+              <button mat-icon-button [matMenuTriggerFor]="moreMenu" matTooltip="More actions">
+                <mat-icon>more_vert</mat-icon>
+              </button>
+              <mat-menu #moreMenu="matMenu">
+                <button mat-menu-item (click)="openEditDialog(c)">
+                  <mat-icon>edit</mat-icon><span>Edit</span>
+                </button>
+
+                <button mat-menu-item *ngIf="!c.active" (click)="onActivate(c)">
+                  <mat-icon>toggle_on</mat-icon><span>Activate</span>
+                </button>
+                <button mat-menu-item *ngIf="c.active" (click)="onDeactivate(c)">
+                  <mat-icon>toggle_off</mat-icon><span>Deactivate</span>
+                </button>
+
+                <button mat-menu-item *ngIf="!c.published" (click)="onPublish(c)">
+                  <mat-icon>publish</mat-icon><span>Publish</span>
+                </button>
+                <button mat-menu-item *ngIf="c.published" (click)="onUnpublish(c)">
+                  <mat-icon>unpublished</mat-icon><span>Unpublish</span>
+                </button>
+
+                <button mat-menu-item (click)="viewApplications(c)">
+                  <mat-icon>assignment_ind</mat-icon><span>Applications</span>
+                </button>
+
+                <button mat-menu-item (click)="onDelete(c)">
+                  <mat-icon color="warn">delete</mat-icon>
+                  <span class="delete-label">Delete</span>
+                </button>
+              </mat-menu>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="table-row"></tr>
+
+          <tr class="mat-row no-data-row" *matNoDataRow [hidden]="loading()">
+            <td class="mat-cell" [attr.colspan]="displayedColumns.length">
+              No careers found.
+            </td>
+          </tr>
+
+        </table>
+      </div>
+    </mat-card-content>
+
+    <mat-paginator
+      [length]="totalElements()"
+      [pageSize]="pageSize()"
+      [pageIndex]="pageIndex()"
+      [pageSizeOptions]="[5, 10, 25, 50]"
+      showFirstLastButtons
+      (page)="onPageChange($event)">
+    </mat-paginator>
+  </mat-card>
+
+</div>

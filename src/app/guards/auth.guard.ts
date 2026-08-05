@@ -2,7 +2,7 @@ import { inject } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivateFn, Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 
-const ADMIN_ONLY_PATHS = new Set(['dashboard', 'news', 'products', 'projects']);
+const ADMIN_ONLY_PATHS = new Set(['dashboard', 'news', 'products', 'projects', 'careers', 'career-applications']);
 
 export const authGuard: CanActivateFn = (route: ActivatedRouteSnapshot) => {
   const auth   = inject(AuthService);

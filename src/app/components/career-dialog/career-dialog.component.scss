@@ -1,0 +1,78 @@
+.dialog-form {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 4px 0;
+  min-width: 620px;
+}
+
+.full-width { width: 100%; }
+
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  mat-form-field { width: 100%; }
+}
+
+.section-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #2E9E44;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  margin: 8px 0 4px;
+}
+
+.section-divider {
+  margin: 8px 0 12px;
+}
+
+.toggles-row {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+  padding: 4px 0 12px;
+}
+
+// ─── Dynamic list items (responsibilities / requirements / benefits) ───────
+
+.item-list {
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+
+.item-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px 2px 12px;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+
+  &:first-child { border-top: none; }
+  &:hover { background: rgba(0, 0, 0, 0.01); }
+}
+
+.item-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 13.5px;
+  color: #1e293b;
+  padding: 8px 4px;
+
+  &::placeholder { color: rgba(0, 0, 0, 0.3); }
+}
+
+.add-item-btn {
+  align-self: flex-start;
+  margin-bottom: 8px;
+}
+
+@media (max-width: 600px) {
+  .dialog-form { min-width: 0; }
+  .two-col { grid-template-columns: 1fr; }
+}

@@ -5,12 +5,12 @@
 </h2>
 
 <mat-dialog-content class="dialog-content">
-   <!-- <h2>Are You Sure?</h2> -->
-  <p>Do you want to delete <strong>{{ data.name }}</strong>?</p>
+  <p *ngIf="!data.message">Do you want to delete <strong>{{ data.name }}</strong>?</p>
+  <p *ngIf="data.message">{{ data.message }}</p>
   <p class="left-align-text"><em>This action cannot be undone.</em></p>
 </mat-dialog-content>
 
 <mat-dialog-actions class="dialog-actions">
-  <button mat-raised-button color="primary" (click)="onConfirm()">Yes</button>
+  <button mat-raised-button color="primary" (click)="onConfirm()">{{ data.confirmLabel || 'Yes' }}</button>
   <button mat-raised-button (click)="onCancel()">Cancel</button>
 </mat-dialog-actions>

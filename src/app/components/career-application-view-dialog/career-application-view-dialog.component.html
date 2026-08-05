@@ -1,0 +1,125 @@
+<h2 mat-dialog-title class="view-title">
+  <span>Application Details</span>
+  <button mat-icon-button (click)="onClose()" class="close-btn">
+    <mat-icon>close</mat-icon>
+  </button>
+</h2>
+
+<mat-progress-bar *ngIf="loading()" mode="indeterminate"></mat-progress-bar>
+
+<mat-dialog-content *ngIf="application() as app">
+  <div class="view-body">
+
+    <!-- ── Applied For ─────────────────────────────────────────────── -->
+    <div class="applied-for-row">
+      <span class="info-key">Applied For</span>
+      <span class="applied-for-title">{{ app.careerTitle }}</span>
+    </div>
+
+    <mat-divider class="section-divider"></mat-divider>
+
+    <!-- ── Applicant Information ─────────────────────────────────────── -->
+    <p class="section-label">Applicant Information</p>
+
+    <div class="info-grid">
+      <div class="info-item">
+        <span class="info-key">Full Name</span>
+        <span class="info-val">{{ app.fullName }}</span>
+      </div>
+      <div class="info-item">
+        <span class="info-key">Email</span>
+        <span class="info-val info-val--email">{{ app.email }}</span>
+      </div>
+      <div class="info-item">
+        <span class="info-key">Phone</span>
+        <span class="info-val">{{ app.phone || '—' }}</span>
+      </div>
+      <div class="info-item">
+        <span class="info-key">Location</span>
+        <span class="info-val">{{ app.location || '—' }}</span>
+      </div>
+    </div>
+
+    <mat-divider class="section-divider"></mat-divider>
+
+    <!-- ── Professional Background ──────────────────────────────────── -->
+    <p class="section-label">Professional Background</p>
+
+    <div class="info-grid">
+      <div class="info-item">
+        <span class="info-key">Current Job Title</span>
+        <span class="info-val">{{ app.currentJobTitle || '—' }}</span>
+      </div>
+      <div class="info-item">
+        <span class="info-key">Current Company</span>
+        <span class="info-val">{{ app.currentCompany || '—' }}</span>
+      </div>
+      <div class="info-item">
+        <span class="info-key">Years of Experience</span>
+        <span class="info-val">{{ app.yearsOfExperience != null ? app.yearsOfExperience : '—' }}</span>
+      </div>
+    </div>
+
+    <mat-divider class="section-divider"></mat-divider>
+
+    <!-- ── Cover Letter ──────────────────────────────────────────────── -->
+    <p class="section-label">Cover Letter</p>
+    <p class="cover-letter" *ngIf="app.coverLetter; else noCoverLetter">{{ app.coverLetter }}</p>
+    <ng-template #noCoverLetter><p class="no-data-text">No cover letter provided.</p></ng-template>
+
+    <mat-divider class="section-divider"></mat-divider>
+
+    <!-- ── CV ────────────────────────────────────────────────────────── -->
+    <p class="section-label">CV</p>
+    <div class="cv-row">
+      <span class="cv-filename">
+        <mat-icon>description</mat-icon>
+        {{ app.cvFileName || 'CV on file' }}
+      </span>
+    </div>
+    <p class="no-data-text">CV download is not currently supported by the backend API.</p>
+
+    <mat-divider class="section-divider"></mat-divider>
+
+    <!-- ── Metadata ──────────────────────────────────────────────────── -->
+    <p class="section-label">Metadata</p>
+
+    <div class="meta-row">
+      <div class="meta-status">
+        <span class="info-key">Status</span>
+        <div class="status-select-row">
+          <span class="badge" [ngClass]="getStatusClass(app.status)">{{ app.status }}</span>
+          <button mat-stroked-button [matMenuTriggerFor]="statusMenu"
+                  class="change-status-btn" [disabled]="updatingStatus()">
+            <mat-icon>swap_horiz</mat-icon>
+            {{ updatingStatus() ? 'Updating…' : 'Change Status' }}
+          </button>
+          <mat-menu #statusMenu="matMenu">
+            <button mat-menu-item *ngFor="let opt of statusOptions"
+                    (click)="onStatusChange(opt.value)"
+                    [class.status-current]="app.status === opt.value">
+              <mat-icon *ngIf="app.status === opt.value">check</mat-icon>
+              <mat-icon *ngIf="app.status !== opt.value">radio_button_unchecked</mat-icon>
+              <span>{{ opt.label }}</span>
+            </button>
+          </mat-menu>
+        </div>
+      </div>
+
+      <div class="info-item" *ngIf="app.createdAt">
+        <span class="info-key">Applied Date</span>
+        <span class="info-val">{{ app.createdAt | date:'medium' }}</span>
+      </div>
+
+      <div class="info-item" *ngIf="app.updatedAt">
+        <span class="info-key">Updated Date</span>
+        <span class="info-val">{{ app.updatedAt | date:'medium' }}</span>
+      </div>
+    </div>
+
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-raised-button color="primary" (click)="onClose()">Close</button>
+</mat-dialog-actions>
