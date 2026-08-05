@@ -236,10 +236,8 @@ export class NewsComponent implements OnInit {
 
   getCategoryClass(category: string): string {
     const map: Record<string, string> = {
-      COMPANY_NEWS:    'badge-company',
-      PRODUCT_UPDATES: 'badge-product',
-      EVENTS:          'badge-events',
-      ANNOUNCEMENTS:   'badge-announcements',
+      NEWS:    'badge-company',
+      ARTICLE: 'badge-product',
     };
     return map[category] ?? '';
   }

@@ -1,8 +1,4 @@
-export type NewsCategory =
-  | 'COMPANY_NEWS'
-  | 'PRODUCT_UPDATES'
-  | 'EVENTS'
-  | 'ANNOUNCEMENTS';
+export type NewsCategory = 'NEWS' | 'ARTICLE';
 
 export type NewsStatus = 'DRAFT' | 'PUBLISHED' | 'ARCHIVED';
 
@@ -60,10 +56,8 @@ export interface NewsQueryParams {
 }
 
 export const CATEGORY_OPTIONS: { value: NewsCategory; label: string }[] = [
-  { value: 'COMPANY_NEWS',    label: 'Company News' },
-  { value: 'PRODUCT_UPDATES', label: 'Product Updates' },
-  { value: 'EVENTS',          label: 'Events' },
-  { value: 'ANNOUNCEMENTS',   label: 'Announcements' },
+  { value: 'NEWS',    label: 'News' },
+  { value: 'ARTICLE', label: 'Article' },
 ];
 
 export const STATUS_OPTIONS: { value: NewsStatus; label: string }[] = [
@@ -73,10 +67,8 @@ export const STATUS_OPTIONS: { value: NewsStatus; label: string }[] = [
 ];
 
 export const CATEGORY_LABEL_MAP: Record<NewsCategory, string> = {
-  COMPANY_NEWS:    'Company News',
-  PRODUCT_UPDATES: 'Product Updates',
-  EVENTS:          'Events',
-  ANNOUNCEMENTS:   'Announcements',
+  NEWS:    'News',
+  ARTICLE: 'Article',
 };
 
 export const STATUS_LABEL_MAP: Record<NewsStatus, string> = {
